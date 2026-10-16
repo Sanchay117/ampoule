@@ -20,6 +20,8 @@ export default function Demo() {
   }, [log.length]);
   useEffect(() => {
     window.scrollTo({ top: 0 });
+    // On a phone the chapter list is a horizontal strip; keep the open chapter in view.
+    document.querySelector('.chapter-link.current')?.scrollIntoView({ block: 'nearest', inline: 'center' });
     setSelected(chapter.focus?.(story.s)?.id);
   }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
 

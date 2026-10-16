@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      COMPACTC_VERSION: 0.31.1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install the Compact compiler
+        run: |
+          dir="$HOME/.local/compactc-${COMPACTC_VERSION}"
+          curl -fsSL -o /tmp/compactc.zip \
+            "https://github.com/midnightntwrk/compact/releases/download/compactc-v${COMPACTC_VERSION}/compactc_v${COMPACTC_VERSION}_x86_64-unknown-linux-musl.zip"
+          mkdir -p "$dir"
+          unzip -q /tmp/compactc.zip -d "$dir"
+          "$dir/compactc" --version
+
+      - run: npm ci
+
+      # The generated JavaScript is committed so the tests and the web app run without a
+      # compiler. Recompiling must reproduce it byte for byte.
+      - name: Generated contract code matches ampoule.compact
+        run: |
+          npm run compile:fast
+          git diff --exit-code -- contract/src/managed
+
+      - name: Contract and SDK tests
+        run: npm test
+
+      - name: Typecheck every package
+        run: npm run typecheck
+
+      - name: Build the web app
+        run: npm run build
+
+      # Clicks through every chapter of the demo and requires each call's transcript search to
+      # find none of that call's private inputs.
+      - name: End-to-end tests
+        run: |
+          npx --prefix web playwright install --with-deps chromium
+          npm run -w web e2e

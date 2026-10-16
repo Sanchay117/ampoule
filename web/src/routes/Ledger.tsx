@@ -42,7 +42,8 @@ async function liveLedger(address: string) {
     import('@ampoule/contract'),
   ]);
   setNetworkId(NET);
-  const provider = indexerPublicDataProvider(NETWORKS[NET].indexerHttpUrl, NETWORKS[NET].indexerWsUrl);
+  // The package's default WebSocket comes from isomorphic-ws, which has no named export in browsers.
+  const provider = indexerPublicDataProvider(NETWORKS[NET].indexerHttpUrl, NETWORKS[NET].indexerWsUrl, WebSocket as never);
   const state = await provider.queryContractState(address);
   return state ? ledger(state.data) : undefined;
 }
