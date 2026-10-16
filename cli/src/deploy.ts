@@ -4,14 +4,7 @@
 // the contract; all six verifier keys travel in the same transaction. The deployment file
 // records the address and the deploy transaction with explorer links, and is committed.
 import { existsSync } from 'node:fs';
-import {
-  EXPLORERS,
-  hex,
-  NetworkBackend,
-  publicKeyOf,
-  publicView,
-  type ChainNetwork,
-} from '@ampoule/sdk';
+import { EXPLORERS, explorerLink, hex, NetworkBackend, publicKeyOf, publicView, type DeploymentFile } from '@ampoule/sdk';
 import {
   COMPACT_VERSION,
   deploymentPath,
@@ -27,24 +20,6 @@ import {
   type Args,
 } from './common.js';
 import { openSession } from './session.js';
-
-export interface DeploymentFile {
-  project: 'ampoule';
-  network: ChainNetwork;
-  contractAddress: string;
-  deployTx: { txId: string; txHash?: string; blockHeight?: number };
-  deployedAt: string;
-  compactVersion: string;
-  /** The key hashes sealed at deploy time. Public by design. */
-  sealed: { council: string; controller: string; registrar: string };
-  explorer?: { contract: string; deployTx?: string };
-}
-
-export const explorerLink = (n: ChainNetwork, kind: 'tx' | 'contract' | 'block', value: string | number | undefined): string | undefined => {
-  const t = EXPLORERS[n]?.[kind];
-  if (!t || value === undefined) return undefined;
-  return t.replace(/\{txHash\}|\{address\}|\{height\}/, String(value));
-};
 
 export async function deploy(args: Args): Promise<number> {
   const n = network(args);

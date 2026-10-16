@@ -27,7 +27,8 @@ import {
 } from '@midnight-ntwrk/wallet-sdk';
 import * as Rx from 'rxjs';
 import { WebSocket } from 'ws';
-import { NETWORKS, type ChainNetwork, type NetworkEndpoints, type WalletAdapter } from './backend/providers.js';
+import type { WalletAdapter } from './backend/providers.js';
+import { NETWORKS, type ChainNetwork, type NetworkEndpoints } from './networks.js';
 
 export * from './index.js';
 

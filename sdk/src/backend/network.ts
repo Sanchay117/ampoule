@@ -22,7 +22,8 @@ import { CompiledContract } from '@midnight-ntwrk/midnight-js-protocol/compact-j
 import { rethrowAsRefusal } from '../errors.js';
 import { privateStateIdOf } from '../roles.js';
 import type { AmpouleBackend, TxReceipt } from '../types.js';
-import { NETWORKS, type AmpouleProviders, type ChainNetwork, type NetworkEndpoints } from './providers.js';
+import { NETWORKS, type ChainNetwork, type NetworkEndpoints } from '../networks.js';
+import type { AmpouleProviders } from './providers.js';
 
 type CallTx = (...args: unknown[]) => Promise<{ public: { txId: string; txHash?: string; blockHeight: number } }>;
 

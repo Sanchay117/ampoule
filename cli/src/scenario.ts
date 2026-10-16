@@ -14,6 +14,7 @@ import {
   decodeDispense,
   decodeRx,
   drugByCode,
+  explorerLink,
   hex,
   isRefusal,
   labelOf,
@@ -21,8 +22,11 @@ import {
   pureCircuits,
   viewToJson,
   type ChainNetwork,
+  type DeploymentFile,
   type Drug,
+  type Evidence,
   type Prescription,
+  type StepRecord,
   type TxReceipt,
 } from '@ampoule/sdk';
 import {
@@ -42,58 +46,7 @@ import {
   writeJson,
   type Args,
 } from './common.js';
-import { explorerLink, type DeploymentFile } from './deploy.js';
 import { castOn, connect, openSession } from './session.js';
-
-export interface StepRecord {
-  id: string;
-  label: string;
-  actor: string;
-  circuit: string;
-  outcome: 'transaction' | 'refused' | 'checked';
-  txId?: string;
-  txHash?: string;
-  blockHeight?: number;
-  explorer?: string;
-  refusal?: { code: string; explanation: string };
-  /** Off-chain checks (the pharmacist's), with what they found. */
-  detail?: Record<string, unknown>;
-  durationMs: number;
-  at: string;
-}
-
-export interface Evidence {
-  project: 'ampoule';
-  network: ChainNetwork;
-  contractAddress: string;
-  compactVersion: string;
-  startedAt: string;
-  finishedAt: string;
-  explorer?: DeploymentFile['explorer'];
-  deployTx: DeploymentFile['deployTx'];
-  steps: StepRecord[];
-  summary: { transactions: number; refusals: Array<{ id: string; code: string }>; firstBlock: number; lastBlock: number };
-  finalState: unknown;
-  disclosedForAudit?: {
-    note: string;
-    patients: Array<{ name: string; patientKey: string }>;
-    prescriptions: Array<{
-      step: string;
-      drugCode: string;
-      patient: string;
-      doctor: string;
-      quantity: string;
-      drugClass: string;
-      fills: string;
-      notAfter: string;
-      salt: string;
-      leaf: string;
-    }>;
-    dispenseSalts: Array<{ step: string; salt: string }>;
-    /** Public values the raw-transaction search must find, proving the search works. */
-    publicControls: string[];
-  };
-}
 
 interface Progress {
   network: ChainNetwork;

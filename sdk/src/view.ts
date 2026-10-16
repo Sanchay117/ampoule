@@ -154,3 +154,34 @@ export function publicView(l: Ledger): PublicView {
 export function viewToJson(view: PublicView): unknown {
   return JSON.parse(JSON.stringify(view, (_k, v) => (typeof v === 'bigint' ? v.toString() : v)));
 }
+
+type Json<T> = { [K in keyof T]: T[K] extends bigint ? string : T[K] extends object ? Json<T[K]> : T[K] };
+
+/** The inverse of `viewToJson`, for rendering a view stored in an evidence file. */
+export function viewFromJson(json: unknown): PublicView {
+  const v = json as Json<PublicView>;
+  const big = (s: string) => BigInt(s);
+  return {
+    authorities: v.authorities,
+    doctors: v.doctors.map((d) => ({
+      ...d,
+      issued: big(d.issued),
+      controlledIssued: big(d.controlledIssued),
+      filled: big(d.filled),
+      controlledFilled: big(d.controlledFilled),
+    })),
+    pharmacies: v.pharmacies.map((p) => ({ ...p, filled: big(p.filled) })),
+    policies: v.policies.map((p) => ({ drugClass: big(p.drugClass), windowSeconds: big(p.windowSeconds), maxFills: big(p.maxFills) })),
+    fills: v.fills.map((f) => ({ ...f, drugClass: big(f.drugClass), validBefore: big(f.validBefore) })),
+    totals: {
+      issued: big(v.totals.issued),
+      filled: big(v.totals.filled),
+      enrolled: big(v.totals.enrolled),
+      prescriptions: big(v.totals.prescriptions),
+      fillNullifiers: big(v.totals.fillNullifiers),
+      capNullifiers: big(v.totals.capNullifiers),
+    },
+    roots: v.roots,
+    fillsByClass: v.fillsByClass.map((c) => ({ drugClass: big(c.drugClass), fills: big(c.fills) })),
+  };
+}
