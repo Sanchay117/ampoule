@@ -101,6 +101,14 @@ function deriveKeys(seedHex: string) {
   return derived.keys;
 }
 
+/** The unshielded (Bech32m) address of a seed, computed offline: where the faucet should pay. */
+export function walletAddressOf(seedHex: string, network: ChainNetwork): string {
+  const keys = deriveKeys(seedHex);
+  return createKeystore(keys[Roles.NightExternal], network as any)
+    .getBech32Address()
+    .asString();
+}
+
 /**
  * Starts a wallet-sdk 1.2.0 facade and exposes it as a `WalletAdapter`. `balanceTx` signs the
  * recipe between balancing and finalizing, which a transaction spending unshielded coins needs.

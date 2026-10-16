@@ -18,6 +18,7 @@
     "compile:fast": "npm run -w contract compile:fast",
     "test": "npm run -w contract test && npm run -w sdk test",
     "typecheck": "npm run -w contract typecheck && npm run -w sdk typecheck && npm run -w cli typecheck && npm run -w web typecheck",
+    "cli": "npm run -s -w cli ampoule --",
     "dev": "npm run -w web dev",
     "build": "npm run -w web build"
   },

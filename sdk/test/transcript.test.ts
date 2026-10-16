@@ -109,9 +109,11 @@ describe('decoding authority calls', () => {
     expect(of(lic, 'insert').map((e) => e.field)).toEqual(['issuedByDoctor', 'controlledByDoctor', 'doctors']);
 
     const p = new Patient(backend);
-    const enr = decodeTranscript((await registrar.enroll(p.publicKey)).transcript!);
+    const enrolled = (await registrar.enroll(p.publicKey)).transcript!;
+    const enr = decodeTranscript(enrolled);
     expect(of(enr, 'other')).toEqual([]);
     expect(of(enr, 'tree-insert').map((e) => e.field)).toEqual(['patients']);
-    expect(scanTranscript((await registrar.enroll(new Patient(backend).publicKey)).transcript!, { 'patient key': p.publicKey }).present).toEqual([]);
+    // Even the enrollment itself publishes only a hash of the patient key.
+    expect(scanTranscript(enrolled, { 'patient key': p.publicKey })).toMatchObject({ present: [], absent: ['patient key'] });
   });
 });
