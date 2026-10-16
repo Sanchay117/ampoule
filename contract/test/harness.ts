@@ -16,8 +16,8 @@ import { AmpouleSimulator, type CircuitResult } from '../src/simulator.js';
 export const DAY = 86_400n;
 /** 2026-10-16T00:00:00Z, the default block time for tests. */
 export const T0 = 1_792_108_800n;
-/** Class 2 (opioid analgesics) in the test policy: one fill per 30 days per person. */
-export const OPIOIDS = 2n;
+/** Class 1 (opioid analgesics) in the test policy: one fill per 30 days per person. */
+export const OPIOIDS = 1n;
 export const WINDOW = 30n * DAY;
 
 export const randomBytes32 = (): Uint8Array => crypto.getRandomValues(new Uint8Array(32));
@@ -175,7 +175,7 @@ export class DoctorPersona extends Persona {
     return {
       patient: patient.key,
       doctor: this.id,
-      drug: id32(o.drug ?? 'RXCUI:197696 amoxicillin 500mg'),
+      drug: id32(o.drug ?? 'amoxicillin-500-cap'),
       quantity: o.quantity ?? 21n,
       drugClass: o.drugClass ?? 0n,
       fills: o.fills ?? 1n,
@@ -291,10 +291,10 @@ export class Network {
 export function world(now: bigint = T0) {
   const net = new Network(now);
   net.controller.setPolicy(OPIOIDS, WINDOW, 1n);
-  const rao = net.doctor('NMC-DL-58213');
-  const mehta = net.doctor('NMC-MH-11902');
-  const apollo = net.pharmacy('DL-RX-20B-4471');
-  const medplus = net.pharmacy('DL-RX-21B-0932');
+  const rao = net.doctor('MC-DL-58213');
+  const mehta = net.doctor('MC-MH-11902');
+  const lotus = net.pharmacy('DL-RX-20B-4471');
+  const neem = net.pharmacy('DL-RX-21B-0932');
   const ravi = net.patient();
-  return { net, rao, mehta, apollo, medplus, ravi };
+  return { net, rao, mehta, lotus, neem, ravi };
 }

@@ -8,7 +8,7 @@ import { pureCircuits as pure } from '../src/index.js';
 import type { CircuitResult } from '../src/simulator.js';
 import { DAY, OPIOIDS, id32, keyHex, leHex, transcriptMentions, transcriptValues, world } from './harness.js';
 
-const TRAMADOL = { drug: 'RXCUI:835603 tramadol 50mg', drugClass: OPIOIDS, quantity: 10n };
+const TRAMADOL = { drug: 'tramadol-50-tab', drugClass: OPIOIDS, quantity: 10n };
 
 /** 32-byte cells only: keys, hashes, ids. Short cells (small integers) collide by chance. */
 const wide = (res: CircuitResult): Set<string> => new Set(transcriptValues(res).filter((v) => v.length >= 40));
@@ -34,12 +34,12 @@ describe('what issuing reveals', () => {
 
 describe('what filling reveals', () => {
   it('the pharmacy, its challenge, the doctor, the class and two nullifiers', () => {
-    const { rao, ravi, apollo, net } = world();
+    const { rao, ravi, lotus, net } = world();
     const rx = rao.prescribe(ravi, TRAMADOL);
-    const challenge = apollo.challenge();
-    const res = ravi.fill(rx, apollo, { challenge });
+    const challenge = lotus.challenge();
+    const res = ravi.fill(rx, lotus, { challenge });
     const epoch = net.sim.now / net.windowOf(OPIOIDS);
-    expect(transcriptMentions(res, apollo.id)).toBe(true);
+    expect(transcriptMentions(res, lotus.id)).toBe(true);
     expect(transcriptMentions(res, challenge)).toBe(true);
     expect(transcriptMentions(res, rao.id)).toBe(true);
     expect(transcriptMentions(res, pure.fillNullifierOf(ravi.sk, pure.rxLeafOf(rx), 0n))).toBe(true);
@@ -47,10 +47,10 @@ describe('what filling reveals', () => {
   });
 
   it('never the patient key, the prescription leaf, the drug, the expiry or any secret', () => {
-    const { rao, ravi, apollo } = world();
+    const { rao, ravi, lotus } = world();
     const rx = rao.prescribe(ravi, { ...TRAMADOL, validFor: 9n * DAY });
-    const salt = id32('counter-salt-for-apollo');
-    const res = ravi.fill(rx, apollo, { inputs: { dispenseSalt: salt } });
+    const salt = id32('counter-salt-for-lotus');
+    const res = ravi.fill(rx, lotus, { inputs: { dispenseSalt: salt } });
     expect(transcriptMentions(res, ravi.key)).toBe(false);
     expect(transcriptMentions(res, ravi.sk)).toBe(false);
     expect(transcriptMentions(res, pure.rxLeafOf(rx))).toBe(false);
@@ -61,10 +61,10 @@ describe('what filling reveals', () => {
   });
 
   it('the stored record holds a commitment to the drug, not the drug', () => {
-    const { rao, ravi, apollo, net } = world();
+    const { rao, ravi, lotus, net } = world();
     const rx = rao.prescribe(ravi, TRAMADOL);
-    const challenge = apollo.challenge();
-    ravi.fill(rx, apollo, { challenge });
+    const challenge = lotus.challenge();
+    ravi.fill(rx, lotus, { challenge });
     const rec = net.ledger.fills.lookup(challenge);
     expect(keyHex(rec.dispense)).not.toBe(keyHex(rx.drug));
     expect(Object.values(rec).some((v) => v instanceof Uint8Array && keyHex(v) === keyHex(rx.drug))).toBe(false);
@@ -74,9 +74,9 @@ describe('what filling reveals', () => {
     // The doctor knows every field of the prescription. The fill nullifier is keyed by the
     // patient secret, so recomputing it from the prescription alone is impossible: the best
     // the doctor can do is hash what they know, and that value is not in the transcript.
-    const { rao, ravi, apollo } = world();
+    const { rao, ravi, lotus } = world();
     const rx = rao.prescribe(ravi, TRAMADOL);
-    const res = ravi.fill(rx, apollo);
+    const res = ravi.fill(rx, lotus);
     const guesses = [pure.rxLeafOf(rx), pure.fillNullifierOf(rx.salt, pure.rxLeafOf(rx), 0n), pure.fillNullifierOf(rx.patient, pure.rxLeafOf(rx), 0n)];
     for (const g of guesses) expect(transcriptMentions(res, g)).toBe(false);
   });
@@ -84,16 +84,16 @@ describe('what filling reveals', () => {
 
 describe('unlinkability', () => {
   it('two fills by the same person share nothing that fills by two different people do not', () => {
-    const { net, rao, mehta, apollo, medplus, ravi } = world();
+    const { net, rao, mehta, lotus, neem, ravi } = world();
     const meera = net.patient();
     // Same doctor, class and pharmacy pairing for both comparisons, so only identity differs.
-    const raviA = ravi.fill(rao.prescribe(ravi, TRAMADOL), apollo);
+    const raviA = ravi.fill(rao.prescribe(ravi, TRAMADOL), lotus);
     net.sim.advance(31n * DAY);
-    const raviB = ravi.fill(mehta.prescribe(ravi, TRAMADOL), medplus);
+    const raviB = ravi.fill(mehta.prescribe(ravi, TRAMADOL), neem);
     net.sim.advance(31n * DAY);
-    const meeraA = meera.fill(rao.prescribe(meera, TRAMADOL), apollo);
+    const meeraA = meera.fill(rao.prescribe(meera, TRAMADOL), lotus);
     net.sim.advance(31n * DAY);
-    const meeraB = meera.fill(mehta.prescribe(meera, TRAMADOL), medplus);
+    const meeraB = meera.fill(mehta.prescribe(meera, TRAMADOL), neem);
 
     const intersect = (a: Set<string>, b: Set<string>) => new Set([...a].filter((x) => b.has(x)));
     const samePerson = intersect(wide(raviA), wide(raviB));
@@ -104,24 +104,24 @@ describe('unlinkability', () => {
   });
 
   it('refused attempts leave no trace at all', () => {
-    const { net, rao, mehta, apollo, medplus, ravi } = world();
-    ravi.fill(rao.prescribe(ravi, TRAMADOL), apollo);
+    const { net, rao, mehta, lotus, neem, ravi } = world();
+    ravi.fill(rao.prescribe(ravi, TRAMADOL), lotus);
     const second = mehta.prescribe(ravi, TRAMADOL);
     const before = net.sim.state;
-    expect(() => ravi.fill(second, medplus)).toThrow(/CAP_REACHED/);
+    expect(() => ravi.fill(second, neem)).toThrow(/CAP_REACHED/);
     expect(net.sim.state).toBe(before);
   });
 });
 
 describe('what the ledger holds at rest', () => {
   it('no patient key, drug code or prescription field appears anywhere in public state', () => {
-    const { net, rao, mehta, apollo, medplus, ravi } = world();
+    const { net, rao, mehta, lotus, neem, ravi } = world();
     const rxs = [
       rao.prescribe(ravi, TRAMADOL),
-      mehta.prescribe(ravi, { drug: 'RXCUI:1191 aspirin 75mg', quantity: 30n, fills: 3n, validFor: 90n * DAY }),
+      mehta.prescribe(ravi, { drug: 'aspirin-75-tab', quantity: 30n, fills: 3n, validFor: 90n * DAY }),
     ];
-    ravi.fill(rxs[0]!, apollo);
-    ravi.fill(rxs[1]!, medplus);
+    ravi.fill(rxs[0]!, lotus);
+    ravi.fill(rxs[1]!, neem);
     const l = net.ledger;
     const publicBytes: string[] = [];
     for (const [k, v] of l.fills) publicBytes.push(keyHex(k), keyHex(v.pharmacy), keyHex(v.doctor), keyHex(v.dispense));

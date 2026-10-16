@@ -27,9 +27,9 @@ describe('random histories match the reference model', () => {
   it('fills, caps, expiry and suspensions', () => {
     fc.assert(
       fc.property(fc.array(cmd, { minLength: 1, maxLength: 24 }), (cmds) => {
-        const { net, rao, mehta, apollo, medplus, ravi } = world();
+        const { net, rao, mehta, lotus, neem, ravi } = world();
         const doctors = [rao, mehta];
-        const pharmacies = [apollo, medplus];
+        const pharmacies = [lotus, neem];
         const patients = [ravi, net.patient()];
         const active = [true, true];
         const rxs: ModelRx[] = [];

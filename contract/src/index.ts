@@ -21,6 +21,7 @@ export {
   type Role,
 } from './private-state.js';
 export { REFUSALS, refusalCodeOf, type RefusalCode } from './refusals.js';
+export { AmpouleSimulator, type CircuitResult, type SimulatorDeploy } from './simulator.js';
 
 /** The circuits a deployment proves. Kept in one place for the zk-config providers. */
 export const CIRCUITS = ['setDoctor', 'setPharmacy', 'setPolicy', 'enrollPatient', 'issue', 'fill'] as const;
