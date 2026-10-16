@@ -1,8 +1,10 @@
 # Ampoule
 
+[![CI](https://github.com/Sanchay117/ampoule/actions/workflows/ci.yml/badge.svg)](https://github.com/Sanchay117/ampoule/actions/workflows/ci.yml) [![Built on Midnight](https://img.shields.io/badge/built%20on-Midnight-3b2fc9)](https://midnight.network) [![Compact 0.31.1](https://img.shields.io/badge/Compact-0.31.1-555)](contract/src/ampoule.compact) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+
 **Sealed prescriptions on Midnight.** One prescription, one fill. Monthly caps on opioids and other controlled drugs that hold across every doctor and every pharmacy. And no patient data on chain.
 
-**[Live demo](https://sanchay117.github.io/ampoule/)** (runs in your browser, no wallet) · **[On Midnight Preview](https://sanchay117.github.io/ampoule/#/ledger)** · **[The contract](contract/src/ampoule.compact)** · **[For judges](JUDGES.md)** · [Privacy boundary](docs/PRIVACY-BOUNDARY.md) · [Threat model](docs/THREAT-MODEL.md)
+**[Live demo](https://sanchay117.github.io/ampoule/)** (runs in your browser, no wallet) · **[On Midnight Preview](https://sanchay117.github.io/ampoule/#/ledger)** · **[The contract](contract/src/ampoule.compact)** · **[For judges](JUDGES.md)** · [Privacy boundary](docs/PRIVACY-BOUNDARY.md) · [Threat model](docs/THREAT-MODEL.md) · [Adoption](docs/ADOPTION.md)
 
 ![A fill at the pharmacy counter in the guided demo. Left, the pharmacy's and the patient's screens. Right, every operation the transaction published, decoded.](docs/img/demo-counter.png)
 
@@ -26,6 +28,10 @@ Ampoule gets the policing without the register.
 | The pharmacist hands over exactly what was prescribed | The fill record commits to drug and quantity; the patient's phone opens it for the pharmacist |
 
 What the chain never sees: who the patient is, the drug, the quantity, the expiry date, or anything that links two fills by the same person. Refused attempts never reach the chain at all, because the proof cannot be built.
+
+## Who it is for
+
+Regulators set controlled-drug rules and pharmacies carry them out. Ampoule gives the regulator (a state drug controller or a medical council) live public counts and suspensions that take effect everywhere at once. It gives the pharmacy one check at the counter that covers every other pharmacy. And it gives the patient a prescription that only the people treating them can read. In India it would replace the Schedule H1 register every pharmacy keeps today: a paper record of the patient's name, the drug and the quantity for every listed sale, which no other pharmacy can see. The registrar already exists: 79.71 crore ABHA health IDs had been created by July 2025. [docs/ADOPTION.md](docs/ADOPTION.md) has the adoption path, the business model and the sources.
 
 ## Try it
 
@@ -123,7 +129,7 @@ Secrets (the wallet mnemonic, the demo's authority keys) are written to `cli/.se
 | [`sdk/`](sdk) | One client per participant (council, controller, registrar, doctor, pharmacy, patient), the QR token codecs, the transcript decoder, the public view, the audit, and two backends: in-memory and Midnight network |
 | [`cli/`](cli) | Headless wallet, deploy, the resumable on-chain scenario, and `verify` |
 | [`web/`](web) | The site: landing page, guided demo, on-chain page, Playwright tests |
-| [`docs/`](docs) | Privacy boundary and threat model |
+| [`docs/`](docs) | Privacy boundary, threat model, adoption path |
 
 Built with compactc 0.31.1, `@midnight-ntwrk/compact-runtime` 0.16.0, ledger v8, midnight-js 4.1.1, wallet-sdk 1.2.0 and proof server 8.1.3, as listed in Midnight's compatibility matrix for Preview.
 
@@ -136,6 +142,21 @@ Built with compactc 0.31.1, `@midnight-ntwrk/compact-runtime` 0.16.0, ledger v8,
 - **The browser demo does not prove.** It runs the same compiled circuits on the Compact runtime and shows their real transcripts, but zero-knowledge proofs need a proof server. The Preview deployment uses real proofs.
 - **People see what their role needs.** The doctor sees what they prescribe and the pharmacist sees what they hand over. That is the point of a prescription.
 
+## Roadmap
+
+**Wave 2, this submission.** The contract and its tests, the SDK, the CLI and the Preview deployment, and the site with the guided demo and the on-chain audit.
+
+**Wave 3, 27 October to 16 November.** Make it usable at a real counter.
+
+- A patient wallet that installs as a web app: prescriptions kept offline, key backup, fills proved in the wallet.
+- A counter page with camera scanning, and the pharmacy's log of the challenges it has dispensed against (see "Filling ahead of time" in the [threat model](docs/THREAT-MODEL.md)).
+- Fees paid by the pharmacy, so that no wallet links one patient's fills.
+- Contract changes from the threat model: patient key rotation, a rounded deadline to close the expiry edge case, and deeper trees.
+
+**After the buildathon.** A pilot with one hospital and the pharmacies around it, for one or two controlled classes. Then integrations with e-prescription and pharmacy billing software. See [docs/ADOPTION.md](docs/ADOPTION.md).
+
 ## License
 
 Apache-2.0. All people, clinics and pharmacies in the demo are fictional.
+
+Built on [Midnight](https://midnight.network) with the [Compact](https://docs.midnight.network/) language and the Midnight TypeScript SDKs.
