@@ -1331,7 +1331,6 @@ details.disclosed summary {
 }
 .illustration {
   font-size: 11.5px;
-  color: var(--muted);
-  text-align: right;
-  padding: 6px 4px 0;
+  color: var(--chain-muted);
+  margin-top: 14px;
 }

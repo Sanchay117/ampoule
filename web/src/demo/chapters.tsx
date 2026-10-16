@@ -176,7 +176,7 @@ function CounterScreen({ counter, attempt, onNew, onCheck, testId }: { counter?:
       {attempt && attempt.entry.outcome === 'refused' && (
         <div className="warn-box">
           <b>No fill arrived</b>
-          Nothing is recorded under this counter request. This screen does not learn why, and nothing to hand over.
+          Nothing is recorded under this counter request, so there is nothing to hand over. This screen does not learn why.
         </div>
       )}
       {attempt?.check && attempt.entry.outcome === 'published' && <CheckResult check={attempt.check} attempt={attempt} />}
@@ -619,7 +619,7 @@ function LaterStage() {
           )}
         </Device>
         <Device name={ravi.name} sub={ravi.role} what="phone" color={COLORS.ravi}>
-          <RxCard token={mehtaRx.token} title="Dr Mehta's prescription, still unfilled" />
+          <RxCard token={mehtaRx.token} title={later ? "Dr Mehta's prescription" : "Dr Mehta's prescription, still unfilled"} />
           {laterCounter && !later && (
             <>
               <Step onClick={story.fillLater} kind="accent" testId="ravi-later">
@@ -766,6 +766,7 @@ function RegulatorStage() {
   const story = useStory();
   return (
     <>
+      {!story.s.suspendedFill && <Locked />}
       <PublicTables view={story.world.view()} />
       <div className="next-row">
         <button className="btn ghost" onClick={() => story.reset()} data-testid="reset">

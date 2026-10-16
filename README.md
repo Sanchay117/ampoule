@@ -4,6 +4,8 @@
 
 **[Live demo](https://sanchay117.github.io/ampoule/)** (runs in your browser, no wallet) · **[On Midnight Preview](https://sanchay117.github.io/ampoule/#/ledger)** · **[The contract](contract/src/ampoule.compact)** · **[For judges](JUDGES.md)** · [Privacy boundary](docs/PRIVACY-BOUNDARY.md) · [Threat model](docs/THREAT-MODEL.md)
 
+![A fill at the pharmacy counter in the guided demo. Left, the pharmacy's and the patient's screens. Right, every operation the transaction published, decoded.](docs/img/demo-counter.png)
+
 ## The problem
 
 A prescription for a controlled drug is two things at once. It is a medical record that should stay between a patient, a doctor and a pharmacist. It is also a claim on a supply that is easy to abuse and that society wants to police.
@@ -28,6 +30,10 @@ What the chain never sees: who the patient is, the drug, the quantity, the expir
 ## Try it
 
 **In your browser.** The [guided demo](https://sanchay117.github.io/ampoule/#/demo) walks through nine chapters: setting up the network, a prescription, a fill at the counter, a second fill of the same prescription, doctor shopping, a forged and a borrowed prescription, a new cap window, a suspended doctor, and the regulator's view. Every button runs the compiled contract in your tab on the Compact runtime, through the same SDK the CLI uses on Preview. Beside it, a dark panel decodes each call's public transcript into plain English and searches it for every private input that call used. It never finds one. It does find the pharmacy's licence number, which is public on purpose, so you can see the search works.
+
+| Doctor shopping, refused | Two fills, one person, nothing linking them | What a regulator can read |
+|---|---|---|
+| ![](docs/img/demo-shopping.png) | ![](docs/img/demo-later.png) | ![](docs/img/demo-regulator.png) |
 
 **On Midnight Preview.** The CLI runs the same story on the public testnet with real zero-knowledge proofs. The [on-chain page](https://sanchay117.github.io/ampoule/#/ledger) lists every transaction with explorer links, and its "Run the checks" button downloads every raw transaction of the contract from the public indexer and runs the same audit as `npm run cli -- verify`, in your browser.
 

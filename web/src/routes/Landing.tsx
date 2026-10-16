@@ -117,6 +117,7 @@ export default function Landing() {
                 <dt>Nullifiers</dt>
                 <dd>3b7e90…41c2, c04d1f…9a0e</dd>
               </dl>
+              <p className="illustration">Illustration. The demo computes the real values.</p>
             </div>
           </div>
         </div>
