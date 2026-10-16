@@ -1,0 +1,21 @@
+{
+  "name": "@ampoule/cli",
+  "version": "0.2.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "ampoule": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ampoule/contract": "0.2.0",
+    "@ampoule/sdk": "0.2.0",
+    "@scure/bip39": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.3"
+  }
+}

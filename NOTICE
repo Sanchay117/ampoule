@@ -1,0 +1,8 @@
+Ampoule
+Copyright 2026 Sanchay Singh
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It is built on the Midnight network and uses Midnight Foundation software
+(the Compact toolchain, compact-runtime, Midnight.js, the wallet SDK and the
+DApp Connector API), which is licensed under the Apache License, Version 2.0.

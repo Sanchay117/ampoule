@@ -1,0 +1,293 @@
+// SPDX-License-Identifier: Apache-2.0
+//
+// Ampoule: sealed prescriptions on Midnight.
+//
+// A doctor seals a prescription into a Merkle tree as one opaque leaf. The patient later
+// proves, at any registered pharmacy, that they hold a prescription in that tree, that it is
+// theirs, unexpired and not yet filled, and (for controlled drug classes) that they are
+// still under the per-patient cap for the current window. The pharmacy learns what to
+// dispense; the public ledger learns that some valid prescription was filled. Nobody learns
+// who the patient is, and no one can build a list of what any person takes.
+//
+// Authorization is always proof of knowledge of a secret whose hash is on the ledger, never
+// the fee payer's wallet. Refusal codes are the assert messages and are part of the API.
+pragma language_version >= 0.23.0;
+
+import CompactStandardLibrary;
+
+// ------------------------------------------------------------------------------------------
+// Types
+
+/** A prescription as the patient holds it. Never on the ledger: only its hash is. */
+export struct Prescription {
+  patient: Bytes<32>;   // patientKeyOf(patient secret)
+  doctor: Bytes<32>;    // registered doctor id
+  drug: Bytes<32>;      // drug code, e.g. an RxNorm or CDSCO identifier
+  quantity: Uint<32>;   // units per fill
+  drugClass: Uint<8>;   // 0 = general; anything else is a controlled class with a cap policy
+  fills: Uint<8>;       // fills allowed: 1 + refills
+  notAfter: Uint<64>;   // expiry, unix seconds
+  salt: Bytes<32>;      // makes the leaf unguessable
+}
+
+export struct Doctor { keyHash: Bytes<32>; active: Boolean; }
+export struct Pharmacy { keyHash: Bytes<32>; active: Boolean; }
+
+/** At most `maxFills` fills of a controlled class per patient per `window` seconds. */
+export struct Policy { window: Uint<64>; maxFills: Uint<8>; }
+
+/** What a pharmacy finds on the ledger under its counter challenge. */
+export struct FillRecord {
+  pharmacy: Bytes<32>;
+  doctor: Bytes<32>;
+  drugClass: Uint<8>;
+  dispense: Bytes<32>;     // commitment to (drug, quantity), opened to the pharmacy off chain
+  validBefore: Uint<64>;   // the proof was only valid before this time
+}
+
+struct RxLeafPreimage {
+  domain: Bytes<32>;
+  patient: Bytes<32>;
+  doctor: Bytes<32>;
+  drug: Bytes<32>;
+  quantity: Uint<32>;
+  drugClass: Uint<8>;
+  fills: Uint<8>;
+  notAfter: Uint<64>;
+  salt: Bytes<32>;
+}
+
+struct FillNullifierPreimage { domain: Bytes<32>; sk: Bytes<32>; leaf: Bytes<32>; index: Uint<8>; }
+struct CapNullifierPreimage { domain: Bytes<32>; sk: Bytes<32>; drugClass: Uint<8>; epoch: Uint<64>; slot: Uint<8>; }
+struct DispensePreimage { domain: Bytes<32>; drug: Bytes<32>; quantity: Uint<32>; salt: Bytes<32>; }
+
+// ------------------------------------------------------------------------------------------
+// Public ledger
+
+/** Three authorities with separate keys: no single party runs the whole network. */
+export sealed ledger council: Bytes<32>;     // medical council: licenses doctors
+export sealed ledger controller: Bytes<32>;  // drug controller: licenses pharmacies, sets caps
+export sealed ledger registrar: Bytes<32>;   // health-ID registrar: enrolls one key per person
+
+export ledger doctors: Map<Bytes<32>, Doctor>;
+export ledger pharmacies: Map<Bytes<32>, Pharmacy>;
+export ledger policies: Map<Uint<8>, Policy>;
+
+export ledger patients: HistoricMerkleTree<16, Bytes<32>>;
+export ledger prescriptions: HistoricMerkleTree<16, Bytes<32>>;
+export ledger fillNullifiers: Set<Bytes<32>>;
+export ledger capNullifiers: Set<Bytes<32>>;
+export ledger fills: Map<Bytes<32>, FillRecord>;
+
+export ledger issuedTotal: Counter;
+export ledger filledTotal: Counter;
+export ledger issuedByDoctor: Map<Bytes<32>, Counter>;
+export ledger controlledByDoctor: Map<Bytes<32>, Counter>;
+export ledger filledByPharmacy: Map<Bytes<32>, Counter>;
+
+// ------------------------------------------------------------------------------------------
+// Witnesses: untrusted inputs from the caller's private state. Every property that matters
+// is re-checked below, so a lying witness produces a refusal, never a bad state change.
+
+witness secretKey(): Bytes<32>;
+witness prescription(): Prescription;
+witness patientPath(leaf: Bytes<32>): MerkleTreePath<16, Bytes<32>>;
+witness prescriptionPath(leaf: Bytes<32>): MerkleTreePath<16, Bytes<32>>;
+witness fillIndex(leaf: Bytes<32>): Uint<8>;
+witness capSlot(drugClass: Uint<8>, epoch: Uint<64>): Uint<8>;
+witness dispenseSalt(): Bytes<32>;
+
+// ------------------------------------------------------------------------------------------
+// Domain-separated hashes. Exported as pure circuits so wallets compute the same values.
+
+export pure circuit councilKeyOf(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ampoule:v1:council"), sk]);
+}
+export pure circuit controllerKeyOf(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ampoule:v1:controller"), sk]);
+}
+export pure circuit registrarKeyOf(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ampoule:v1:registrar"), sk]);
+}
+export pure circuit doctorKeyOf(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ampoule:v1:doctor"), sk]);
+}
+export pure circuit pharmacyKeyOf(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ampoule:v1:pharmacy"), sk]);
+}
+/** The one key a person is enrolled under; prescriptions are bound to it. */
+export pure circuit patientKeyOf(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ampoule:v1:patient"), sk]);
+}
+
+export pure circuit rxLeafOf(rx: Prescription): Bytes<32> {
+  return persistentHash<RxLeafPreimage>(RxLeafPreimage {
+    domain: pad(32, "ampoule:v1:rx"),
+    patient: rx.patient, doctor: rx.doctor, drug: rx.drug, quantity: rx.quantity,
+    drugClass: rx.drugClass, fills: rx.fills, notAfter: rx.notAfter, salt: rx.salt });
+}
+
+/** Keyed by the patient secret: not even the prescribing doctor can tell when it is filled. */
+export pure circuit fillNullifierOf(sk: Bytes<32>, leaf: Bytes<32>, index: Uint<8>): Bytes<32> {
+  return persistentHash<FillNullifierPreimage>(
+    FillNullifierPreimage { domain: pad(32, "ampoule:v1:fill"), sk: sk, leaf: leaf, index: index });
+}
+
+/** One per (person, controlled class, window, slot): the cap holds across every pharmacy. */
+export pure circuit capNullifierOf(sk: Bytes<32>, drugClass: Uint<8>, epoch: Uint<64>, slot: Uint<8>): Bytes<32> {
+  return persistentHash<CapNullifierPreimage>(CapNullifierPreimage {
+    domain: pad(32, "ampoule:v1:cap"), sk: sk, drugClass: drugClass, epoch: epoch, slot: slot });
+}
+
+export pure circuit dispenseCommitOf(drug: Bytes<32>, quantity: Uint<32>, salt: Bytes<32>): Bytes<32> {
+  return persistentHash<DispensePreimage>(
+    DispensePreimage { domain: pad(32, "ampoule:v1:dispense"), drug: drug, quantity: quantity, salt: salt });
+}
+
+// ------------------------------------------------------------------------------------------
+// Constructor
+
+constructor(councilKey: Bytes<32>, controllerKey: Bytes<32>, registrarKey: Bytes<32>) {
+  council = disclose(councilKey);
+  controller = disclose(controllerKey);
+  registrar = disclose(registrarKey);
+}
+
+// ------------------------------------------------------------------------------------------
+// Authorities
+
+/** Licenses a doctor, rotates their key, or suspends them (a suspended doctor's open
+ *  prescriptions stop filling everywhere at once). */
+export circuit setDoctor(id: Bytes<32>, keyHash: Bytes<32>, active: Boolean): [] {
+  assert(councilKeyOf(secretKey()) == council, "NOT_COUNCIL");
+  const d = disclose(id);
+  if (!issuedByDoctor.member(d)) {
+    issuedByDoctor.insertDefault(d);
+    controlledByDoctor.insertDefault(d);
+  }
+  doctors.insert(d, Doctor { keyHash: disclose(keyHash), active: disclose(active) });
+}
+
+export circuit setPharmacy(id: Bytes<32>, keyHash: Bytes<32>, active: Boolean): [] {
+  assert(controllerKeyOf(secretKey()) == controller, "NOT_CONTROLLER");
+  const p = disclose(id);
+  if (!filledByPharmacy.member(p)) {
+    filledByPharmacy.insertDefault(p);
+  }
+  pharmacies.insert(p, Pharmacy { keyHash: disclose(keyHash), active: disclose(active) });
+}
+
+export circuit setPolicy(drugClass: Uint<8>, window: Uint<64>, maxFills: Uint<8>): [] {
+  assert(controllerKeyOf(secretKey()) == controller, "NOT_CONTROLLER");
+  const c = disclose(drugClass);
+  assert(c != 0, "GENERAL_CLASS_HAS_NO_CAP");
+  assert(disclose(window) > 0, "BAD_POLICY");
+  assert(disclose(maxFills) > 0, "BAD_POLICY");
+  policies.insert(c, Policy { window: disclose(window), maxFills: disclose(maxFills) });
+}
+
+/** The registrar checks identity off chain once and enrolls exactly one key per person. */
+export circuit enrollPatient(patientKey: Bytes<32>): [] {
+  assert(registrarKeyOf(secretKey()) == registrar, "NOT_REGISTRAR");
+  patients.insert(disclose(patientKey));
+}
+
+// ------------------------------------------------------------------------------------------
+// Doctor
+
+/**
+ * Seals one prescription. The leaf is computed here from the private prescription, so the
+ * public drug class (which feeds the per-doctor controlled-substance count) cannot disagree
+ * with what the leaf actually encodes.
+ */
+export circuit issue(): [] {
+  const rx = prescription();
+  const d = disclose(rx.doctor);
+  assert(doctors.member(d), "UNKNOWN_DOCTOR");
+  const doc = doctors.lookup(d);
+  assert(doc.keyHash == doctorKeyOf(secretKey()), "NOT_THIS_DOCTOR");
+  assert(doc.active, "DOCTOR_SUSPENDED");
+  assert(rx.fills > 0, "NO_FILLS");
+  assert(rx.quantity > 0, "NO_QUANTITY");
+  const c = disclose(rx.drugClass);
+  if (c != 0) {
+    assert(policies.member(c), "UNKNOWN_CLASS");
+    controlledByDoctor.lookup(d).increment(1);
+  }
+  prescriptions.insert(disclose(rxLeafOf(rx)));
+  issuedByDoctor.lookup(d).increment(1);
+  issuedTotal.increment(1);
+}
+
+// ------------------------------------------------------------------------------------------
+// Patient
+
+/**
+ * Fills one prescription at a pharmacy counter.
+ *
+ * Public inputs: the pharmacy, its one-time counter challenge, the cap window number and a
+ * validity bound. `validBefore` is the only time that reaches the transcript: the proof shows
+ * now < validBefore <= notAfter, so the exact expiry stays private.
+ */
+export circuit fill(pharmacyId: Bytes<32>, challenge: Bytes<32>, epoch: Uint<64>, validBefore: Uint<64>): [] {
+  const ph = disclose(pharmacyId);
+  assert(pharmacies.member(ph), "UNKNOWN_PHARMACY");
+  assert(pharmacies.lookup(ph).active, "PHARMACY_SUSPENDED");
+  const ch = disclose(challenge);
+  assert(!fills.member(ch), "CHALLENGE_USED");
+
+  // An enrolled person, anonymously: membership in the patient tree.
+  const sk = secretKey();
+  const me = patientKeyOf(sk);
+  const pp = patientPath(me);
+  assert(pp.leaf == me, "NOT_ENROLLED");
+  assert(patients.checkRoot(disclose(merkleTreePathRoot<16, Bytes<32>>(pp))), "NOT_ENROLLED");
+
+  // A prescription that was really issued, unaltered, and issued to this person.
+  const rx = prescription();
+  assert(rx.patient == me, "NOT_YOUR_PRESCRIPTION");
+  const leaf = rxLeafOf(rx);
+  const rp = prescriptionPath(leaf);
+  assert(rp.leaf == leaf, "NO_SUCH_PRESCRIPTION");
+  assert(prescriptions.checkRoot(disclose(merkleTreePathRoot<16, Bytes<32>>(rp))), "NO_SUCH_PRESCRIPTION");
+
+  // Written by a doctor who is still licensed.
+  const doc = disclose(rx.doctor);
+  assert(doctors.lookup(doc).active, "DOCTOR_SUSPENDED");
+
+  // Not expired.
+  const vb = disclose(validBefore);
+  assert(blockTimeLt(vb), "REQUEST_EXPIRED");
+  assert(vb <= rx.notAfter, "PRESCRIPTION_EXPIRED");
+
+  // Not filled more often than prescribed.
+  const k = fillIndex(leaf);
+  assert(k < rx.fills, "ALREADY_FILLED");
+  const fn = disclose(fillNullifierOf(sk, leaf, k));
+  assert(!fillNullifiers.member(fn), "ALREADY_FILLED");
+  fillNullifiers.insert(fn);
+
+  // Controlled classes: at most maxFills per person per window, across all pharmacies.
+  const c = disclose(rx.drugClass);
+  if (c != 0) {
+    const pol = policies.lookup(c);
+    const e = disclose(epoch);
+    const start = (e * pol.window) as Uint<64>;
+    assert(blockTimeGte(start), "WRONG_WINDOW");
+    assert(vb <= start + pol.window, "WRONG_WINDOW");
+    const s = capSlot(c, e);
+    assert(s < pol.maxFills, "CAP_REACHED");
+    const cn = disclose(capNullifierOf(sk, c, e, s));
+    assert(!capNullifiers.member(cn), "CAP_REACHED");
+    capNullifiers.insert(cn);
+  }
+
+  fills.insert(ch, FillRecord {
+    pharmacy: ph,
+    doctor: doc,
+    drugClass: c,
+    dispense: disclose(dispenseCommitOf(rx.drug, rx.quantity, dispenseSalt())),
+    validBefore: vb });
+  filledByPharmacy.lookup(ph).increment(1);
+  filledTotal.increment(1);
+}

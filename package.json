@@ -1,0 +1,41 @@
+{
+  "name": "ampoule",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Sealed prescriptions on Midnight: one prescription, one fill, no patient data on chain",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "contract",
+    "sdk",
+    "cli",
+    "web"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "compile": "npm run -w contract compile",
+    "compile:fast": "npm run -w contract compile:fast",
+    "test": "npm run -w contract test && npm run -w sdk test",
+    "typecheck": "npm run -w contract typecheck && npm run -w sdk typecheck && npm run -w cli typecheck && npm run -w web typecheck",
+    "dev": "npm run -w web dev",
+    "build": "npm run -w web build"
+  },
+  "overrides": {
+    "@midnight-ntwrk/onchain-runtime-v3": "3.0.0",
+    "@midnight-ntwrk/ledger-v8": "8.1.0",
+    "@midnight-ntwrk/wallet-sdk-abstractions": "2.1.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "3.1.2",
+    "@midnight-ntwrk/wallet-sdk-capabilities": "3.3.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "4.2.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "4.1.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "3.0.3",
+    "@midnight-ntwrk/wallet-sdk-indexer-client": "1.2.3",
+    "@midnight-ntwrk/wallet-sdk-node-client": "1.1.3",
+    "@midnight-ntwrk/wallet-sdk-prover-client": "1.2.3",
+    "@midnight-ntwrk/wallet-sdk-runtime": "1.0.5",
+    "@midnight-ntwrk/wallet-sdk-shielded": "3.0.2",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "3.1.0",
+    "@midnight-ntwrk/wallet-sdk-utilities": "1.2.1"
+  }
+}
