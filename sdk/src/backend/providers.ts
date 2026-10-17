@@ -87,8 +87,13 @@ export function createProviders(options: CreateProvidersOptions): AmpouleProvide
   };
 }
 
-/** ZK artifacts served over HTTP from `<baseUrl>/keys` and `<baseUrl>/zkir`. */
-export const fetchZkConfigProvider = (baseUrl: string): ZKConfigProvider<string> => new FetchZkConfigProvider<string>(baseUrl);
+/**
+ * ZK artifacts served over HTTP from `<baseUrl>/keys` and `<baseUrl>/zkir`. The provider calls its
+ * fetch as a method of itself, which a browser's native fetch refuses ("Illegal invocation"), so it
+ * gets one bound to the global object.
+ */
+export const fetchZkConfigProvider = (baseUrl: string): ZKConfigProvider<string> =>
+  new FetchZkConfigProvider<string>(baseUrl, globalThis.fetch.bind(globalThis));
 
 /** Private state that lives as long as the page. The CLI uses the LevelDB provider instead. */
 export function inMemoryPrivateStateProvider(): PrivateStateProvider<PrivateStateId, AmpoulePrivateState> {
