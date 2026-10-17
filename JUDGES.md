@@ -1,5 +1,7 @@
 # Ampoule in five minutes
 
+Prefer to watch first? The [3-minute demo video](https://youtu.be/CUaj5al-Ff4) shows the guided demo, a live run on Midnight Preview and the public audit.
+
 ## 1. See it work (2 minutes, no install)
 
 Open the **[guided demo](https://sanchay117.github.io/ampoule/#/demo)**. Either click through the chapters, or press **Play the whole story** in the left column and then click any chapter to see how it ended.

@@ -4,7 +4,7 @@
 
 **Sealed prescriptions on Midnight.** One prescription, one fill. Monthly caps on opioids and other controlled drugs that hold across every doctor and every pharmacy. And no patient data on chain.
 
-**[Guided demo](https://sanchay117.github.io/ampoule/#/demo)** (runs in your browser, no wallet) · **[Live with Lace](https://sanchay117.github.io/ampoule/#/live)** · **[On Midnight Preview](https://sanchay117.github.io/ampoule/#/ledger)** · **[The contract](contract/src/ampoule.compact)** · **[For judges](JUDGES.md)** · [Privacy boundary](docs/PRIVACY-BOUNDARY.md) · [Threat model](docs/THREAT-MODEL.md) · [Adoption](docs/ADOPTION.md)
+**[Demo video, 3 min](https://youtu.be/CUaj5al-Ff4)** · **[Guided demo](https://sanchay117.github.io/ampoule/#/demo)** (runs in your browser, no wallet) · **[Live with Lace](https://sanchay117.github.io/ampoule/#/live)** · **[On Midnight Preview](https://sanchay117.github.io/ampoule/#/ledger)** · **[The contract](contract/src/ampoule.compact)** · **[For judges](JUDGES.md)** · [Privacy boundary](docs/PRIVACY-BOUNDARY.md) · [Threat model](docs/THREAT-MODEL.md) · [Adoption](docs/ADOPTION.md)
 
 ![A fill at the pharmacy counter in the guided demo. Left, the pharmacy's and the patient's screens. Right, every operation the transaction published, decoded.](docs/img/demo-counter.png)
 
