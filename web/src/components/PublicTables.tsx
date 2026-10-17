@@ -89,17 +89,18 @@ export function PublicTables({ view }: { view: PublicView }) {
         <table className="plain">
           <thead>
             <tr>
+              <th>Patient</th>
               <th>Pharmacy</th>
               <th>Prescriber</th>
               <th>Class</th>
               <th>Dispense commitment</th>
               <th>Valid before</th>
-              <th>Patient</th>
             </tr>
           </thead>
           <tbody>
             {view.fills.map((f) => (
               <tr key={f.challenge}>
+                <td className="muted">not on chain</td>
                 <td className="mono">{f.pharmacyLicence ?? shortHash(f.pharmacy)}</td>
                 <td className="mono">{f.doctorLicence ?? shortHash(f.doctor)}</td>
                 <td>{className(f.drugClass)}</td>
@@ -107,7 +108,6 @@ export function PublicTables({ view }: { view: PublicView }) {
                   <span className="hash">{shortHash(f.dispense, 8, 4)}</span>
                 </td>
                 <td>{utcTime(f.validBefore)}</td>
-                <td className="muted">not on chain</td>
               </tr>
             ))}
             {view.fills.length === 0 && (
