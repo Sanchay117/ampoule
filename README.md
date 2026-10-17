@@ -4,7 +4,7 @@
 
 **Sealed prescriptions on Midnight.** One prescription, one fill. Monthly caps on opioids and other controlled drugs that hold across every doctor and every pharmacy. And no patient data on chain.
 
-**[Live demo](https://sanchay117.github.io/ampoule/)** (runs in your browser, no wallet) · **[On Midnight Preview](https://sanchay117.github.io/ampoule/#/ledger)** · **[The contract](contract/src/ampoule.compact)** · **[For judges](JUDGES.md)** · [Privacy boundary](docs/PRIVACY-BOUNDARY.md) · [Threat model](docs/THREAT-MODEL.md) · [Adoption](docs/ADOPTION.md)
+**[Guided demo](https://sanchay117.github.io/ampoule/#/demo)** (runs in your browser, no wallet) · **[Live with Lace](https://sanchay117.github.io/ampoule/#/live)** · **[On Midnight Preview](https://sanchay117.github.io/ampoule/#/ledger)** · **[The contract](contract/src/ampoule.compact)** · **[For judges](JUDGES.md)** · [Privacy boundary](docs/PRIVACY-BOUNDARY.md) · [Threat model](docs/THREAT-MODEL.md) · [Adoption](docs/ADOPTION.md)
 
 ![A fill at the pharmacy counter in the guided demo. Left, the pharmacy's and the patient's screens. Right, every operation the transaction published, decoded.](docs/img/demo-counter.png)
 
@@ -40,6 +40,8 @@ Regulators set controlled-drug rules and pharmacies carry them out. Ampoule give
 | Doctor shopping, refused | Two fills, one person, nothing linking them | What a regulator can read |
 |---|---|---|
 | ![](docs/img/demo-shopping.png) | ![](docs/img/demo-later.png) | ![](docs/img/demo-regulator.png) |
+
+**Live, with your wallet.** The [live page](https://sanchay117.github.io/ampoule/#/live) connects Lace (DApp Connector API 4) on Preview, deploys your own copy of the contract and runs the core of the story with real proofs: 10 transactions your wallet balances and submits, and two attempts refused in the browser before anything is sent. After each transaction it downloads the raw bytes from the indexer and searches them for that step's private values, and at the end it runs the full audit on your contract. Without Lace, `npm run cli -- bridge` lends the page the CLI's funded wallet.
 
 **On Midnight Preview.** The CLI runs the same story on the public testnet with real zero-knowledge proofs. The [on-chain page](https://sanchay117.github.io/ampoule/#/ledger) lists every transaction with explorer links, and its "Run the checks" button downloads every raw transaction of the contract from the public indexer and runs the same audit as `npm run cli -- verify`, in your browser.
 
@@ -117,7 +119,10 @@ npm run cli -- wallet status               # syncs, registers tNIGHT for DUST
 npm run cli -- deploy                      # one transaction, six verifier keys
 npm run cli -- scenario                    # the story, with real proofs; resumable
 npm run cli -- verify                      # the public audit; needs no wallet
+npm run cli -- bridge                      # lends the wallet to the live page on localhost
 ```
+
+The live page needs the proving keys in `web/public/zk/`: `npm run compile && npm run -w web zk:stage`. The Pages build does this.
 
 Secrets (the wallet mnemonic, the demo's authority keys) are written to `cli/.secrets/`, which is git-ignored. The deployment and evidence files in `cli/deployments/` and `cli/evidence/` are committed.
 
@@ -127,8 +132,8 @@ Secrets (the wallet mnemonic, the demo's authority keys) are written to `cli/.se
 |---|---|
 | [`contract/`](contract) | The Compact contract, witnesses, a simulator, refusal codes, and the tests: lifecycle, every refusal, privacy, and a model-based property test of random histories |
 | [`sdk/`](sdk) | One client per participant (council, controller, registrar, doctor, pharmacy, patient), the QR token codecs, the transcript decoder, the public view, the audit, and two backends: in-memory and Midnight network |
-| [`cli/`](cli) | Headless wallet, deploy, the resumable on-chain scenario, and `verify` |
-| [`web/`](web) | The site: landing page, guided demo, on-chain page, Playwright tests |
+| [`cli/`](cli) | Headless wallet, deploy, the resumable on-chain scenario, `verify`, and the wallet bridge |
+| [`web/`](web) | The site: landing page, guided demo, live page with Lace, on-chain page, Playwright tests |
 | [`docs/`](docs) | Privacy boundary, threat model, adoption path |
 
 Built with compactc 0.31.1, `@midnight-ntwrk/compact-runtime` 0.16.0, ledger v8, midnight-js 4.1.1, wallet-sdk 1.2.0 and proof server 8.1.3, as listed in Midnight's compatibility matrix for Preview.
@@ -139,12 +144,13 @@ Built with compactc 0.31.1, `@midnight-ntwrk/compact-runtime` 0.16.0, ledger v8,
 - **Lost phones.** The patient secret lives on the phone. The registrar can enroll a new key, but the contract has no revocation for the old one, and prescriptions bound to it must be reissued.
 - **Small networks leak by size.** The class, the prescriber and the pharmacy of every fill are public, on purpose, so regulators can see per-doctor volumes. With few users, that can narrow down who filled what. Unlinkability grows with the number of people filling.
 - **A deadline that equals the expiry.** `validBefore` is the earliest of now plus 30 minutes, the window end and the expiry. A prescription filled in its last 30 minutes therefore publishes its exact expiry. Rounding the deadline would close this.
-- **The browser demo does not prove.** It runs the same compiled circuits on the Compact runtime and shows their real transcripts, but zero-knowledge proofs need a proof server. The Preview deployment uses real proofs.
+- **The guided demo does not prove.** It runs the same compiled circuits on the Compact runtime and shows their real transcripts, but zero-knowledge proofs need a prover. The live page and the CLI make real proofs on Preview.
+- **The live page keeps its testnet personas in the browser.** Every participant's key is made in the visitor's browser and kept in its storage so a run can resume. A real deployment gives each person their own device.
 - **People see what their role needs.** The doctor sees what they prescribe and the pharmacist sees what they hand over. That is the point of a prescription.
 
 ## Roadmap
 
-**Wave 2, this submission.** The contract and its tests, the SDK, the CLI and the Preview deployment, and the site with the guided demo and the on-chain audit.
+**Wave 2, this submission.** The contract and its tests, the SDK, the CLI and the Preview deployment, and the site: the guided demo, the live page with Lace, and the on-chain audit.
 
 **Wave 3, 27 October to 16 November.** Make it usable at a real counter.
 

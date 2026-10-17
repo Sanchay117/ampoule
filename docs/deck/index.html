@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ampoule: pitch deck</title>
+<meta name="viewport" content="width=1280" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* SPDX-License-Identifier: Apache-2.0. Rendered to docs/Ampoule-deck.pdf by web/scripts/deck.mjs. */
+  :root {
+    --paper: #f5f2ea; --paper-2: #ece7db; --card: #fffdf8; --ink: #12201b; --ink-2: #33433d; --muted: #66746e;
+    --line: #ddd6c6; --accent: #0d7a5a; --accent-ink: #075239; --accent-soft: #d8efe5; --red: #b3261e; --red-soft: #f8dcd8;
+    --amber: #a85d06; --amber-soft: #f8e7cc;
+    --chain: #0b1210; --chain-2: #111b18; --chain-3: #182621; --chain-line: #22352e; --chain-ink: #d9f2e7; --chain-muted: #7f9e92;
+    --chain-accent: #4ce0a8; --chain-amber: #ffc46b;
+    --serif: 'Fraunces', Georgia, serif; --sans: 'Inter', system-ui, sans-serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #444; }
+  body { font-family: var(--sans); color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide {
+    width: 1280px; height: 720px; position: relative; overflow: hidden; background: var(--paper);
+    padding: 64px 80px 56px; display: flex; flex-direction: column; page-break-after: always; break-after: page;
+    margin: 0 auto 24px;
+  }
+  @media print { .slide { margin: 0; } html, body { background: none; } }
+  .slide.dark { background: var(--chain); color: var(--chain-ink); }
+  .kicker { font-family: var(--mono); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .dark .kicker { color: var(--chain-accent); }
+  h1, h2 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  h1 { font-size: 76px; line-height: 1.02; }
+  h2 { font-size: 46px; line-height: 1.08; margin-top: 14px; }
+  h2 em, h1 em { font-style: italic; color: var(--accent); }
+  .dark h1 em, .dark h2 em { color: var(--chain-accent); }
+  h3 { font-size: 21px; margin: 0 0 8px; font-weight: 700; }
+  p { margin: 0; }
+  .lede { font-size: 22px; line-height: 1.45; color: var(--ink-2); margin-top: 18px; max-width: 980px; }
+  .dark .lede { color: var(--chain-ink); opacity: .85; }
+  .grow { flex: 1; }
+  .foot { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin-top: 18px; }
+  .dark .foot { color: var(--chain-muted); }
+  .cols { display: grid; gap: 24px; margin-top: 30px; }
+  .c2 { grid-template-columns: 1fr 1fr; } .c3 { grid-template-columns: repeat(3, 1fr); } .c4 { grid-template-columns: repeat(4, 1fr); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px 26px; }
+  .card p, .card li { font-size: 17.5px; line-height: 1.5; color: var(--ink-2); }
+  .dark .card { background: var(--chain-2); border-color: var(--chain-line); }
+  .dark .card p, .dark .card li { color: var(--chain-ink); }
+  .big { font-family: var(--serif); font-size: 56px; font-weight: 600; color: var(--accent); line-height: 1; }
+  .dark .big { color: var(--chain-accent); }
+  .src { font-size: 11.5px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
+  .dark .src { color: var(--chain-muted); }
+  .mono { font-family: var(--mono); }
+  ul.clean { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  ul.clean li { padding-left: 28px; position: relative; }
+  ul.clean li::before { content: ''; position: absolute; left: 4px; top: 9px; width: 10px; height: 10px; border-radius: 3px; background: var(--accent); }
+  .dark ul.clean li::before { background: var(--chain-accent); }
+  .pill { display: inline-block; font-family: var(--mono); font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--red-soft); color: var(--red); }
+  .pill.green { background: var(--accent-soft); color: var(--accent-ink); }
+  table { border-collapse: collapse; width: 100%; font-size: 17px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  td.no { color: var(--accent-ink); font-weight: 600; }
+  .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 30px; margin-top: 34px; align-items: stretch; }
+  .flow .step { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 20px; position: relative; }
+  .flow .step .who { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .flow .step h3 { margin-top: 8px; font-size: 20px; }
+  .flow .step p { font-size: 15.5px; line-height: 1.45; color: var(--ink-2); }
+  .flow .step.chain { background: var(--chain); border-color: var(--chain); color: var(--chain-ink); }
+  .flow .step.chain .who { color: var(--chain-accent); }
+  .flow .step.chain p { color: var(--chain-ink); opacity: .85; }
+  .flow .step:not(:last-child)::after { content: '\2192'; position: absolute; right: -24px; top: 50%; transform: translateY(-50%); font-size: 20px; font-weight: 700; color: var(--accent); }
+  .code { font-family: var(--mono); font-size: 15px; line-height: 1.65; background: var(--chain); color: var(--chain-ink); border-radius: 16px; padding: 22px 24px; }
+  .code .c { color: var(--chain-muted); }
+  .code .a { color: var(--chain-accent); }
+  .shot { border-radius: 14px; border: 1px solid var(--line); overflow: hidden; background: var(--card); }
+  .shot img { display: block; width: 100%; height: 230px; object-fit: cover; object-position: top left; }
+  .shot .cap { padding: 12px 16px; font-size: 15px; color: var(--ink-2); }
+  .shot .cap b { color: var(--ink); }
+  .stat { display: flex; flex-direction: column; gap: 8px; }
+  .stat span { font-size: 16px; color: var(--ink-2); line-height: 1.4; }
+  .dark .stat span { color: var(--chain-ink); opacity: .85; }
+  .road { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 30px; }
+  .road .card .tag { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .road .card.now { border: 2px solid var(--accent); }
+  .road .card.now .tag { color: var(--accent); }
+  .logo { display: flex; align-items: center; gap: 16px; font-family: var(--serif); font-size: 34px; font-weight: 600; }
+  .links { font-family: var(--mono); font-size: 16px; line-height: 1.9; color: var(--chain-ink); }
+  .links b { color: var(--chain-accent); font-weight: 600; display: inline-block; width: 150px; }
+  .num { position: absolute; right: 80px; bottom: 56px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- 1. Title -->
+<section class="slide dark">
+  <div class="logo">
+    <svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#182621"/><path d="M28 8h8v7l3 4v4H25v-4l3-4z" fill="#4ce0a8"/><path d="M24 26h16v22a8 8 0 0 1-16 0z" fill="none" stroke="#d7f5e8" stroke-width="3"/><path d="M27 38h10v9a5 5 0 0 1-10 0z" fill="#4ce0a8"/></svg>
+    Ampoule
+  </div>
+  <div class="grow"></div>
+  <div class="kicker">Zero-knowledge prescriptions on Midnight</div>
+  <h1 style="margin-top:18px">One prescription, one fill,<br/><em>no patient data on chain.</em></h1>
+  <p class="lede">Monthly caps on opioids and other controlled drugs that hold across every doctor and every pharmacy, enforced by a Compact contract that never learns who takes what.</p>
+  <div class="grow"></div>
+  <div class="foot"><span>Midnight Buildathon on AKINDO, Wave 2</span><span>sanchay117.github.io/ampoule · github.com/Sanchay117/ampoule</span></div>
+</section>
+
+<!-- 2. Two things at once -->
+<section class="slide">
+  <div class="kicker">The problem</div>
+  <h2>A controlled-drug prescription is <em>two things at once</em></h2>
+  <div class="cols c2" style="margin-top:44px">
+    <div class="card">
+      <h3>A medical record</h3>
+      <p>Tramadol after a knee injury, alprazolam for anxiety, methylphenidate for ADHD. It should stay between the patient, the doctor and the pharmacist.</p>
+    </div>
+    <div class="card">
+      <h3>A claim on a supply that gets abused</h3>
+      <p>The same prescription can be copied, edited, filled twice, or collected again from a second doctor and a second pharmacy. Society wants that policed.</p>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:40px">Today a patient gets one or the other: rules that are easy to beat, or rules enforced by a list of everyone on painkillers.</p>
+  <div class="num">2</div>
+</section>
+
+<!-- 3. Both answers fail -->
+<section class="slide">
+  <div class="kicker">Today</div>
+  <h2>Both of today's answers fail</h2>
+  <div class="cols c2" style="margin-top:36px">
+    <div class="card">
+      <h3>Paper and PDF prescriptions</h3>
+      <p>Each pharmacy sees one slip and nothing else, so doctor shopping is invisible to all of them.</p>
+      <div class="big" style="margin-top:22px">0.7%</div>
+      <p style="margin-top:8px">of US opioid buyers obtained 1.9% of all opioid prescriptions, from 10 prescribers each on average.</p>
+    </div>
+    <div class="card">
+      <h3>A named register</h3>
+      <p>Every Indian pharmacy keeps a Schedule H1 register: the patient's name, the drug and the quantity for each listed sale, kept for three years. No other pharmacy can see it.</p>
+      <div class="big" style="margin-top:22px">31</div>
+      <p style="margin-top:8px">US states let police query the prescription monitoring database without a warrant.</p>
+    </div>
+  </div>
+  <p class="src">McDonald and Carlson, PLOS ONE 2013 (2008 data). Drugs and Cosmetics Rules, 1945, Schedule H1 (2013). ACLU on prescription drug monitoring programs. Full list in docs/ADOPTION.md.</p>
+  <div class="num">3</div>
+</section>
+
+<!-- 4. The answer -->
+<section class="slide dark">
+  <div class="kicker">Ampoule</div>
+  <h2>The rules, enforced by the chain.<br/><em>The register, never built.</em></h2>
+  <div class="cols c3" style="margin-top:40px">
+    <div class="card"><h3>One prescription, one fill</h3><p>A copied or screenshotted prescription is refused everywhere: <span class="mono">ALREADY_FILLED</span>.</p></div>
+    <div class="card"><h3>A cap per person, network-wide</h3><p>One opioid fill per 30 days from any doctor at any pharmacy: <span class="mono">CAP_REACHED</span>.</p></div>
+    <div class="card"><h3>Licences that bite</h3><p>Suspend a doctor and every open prescription they wrote stops at once: <span class="mono">DOCTOR_SUSPENDED</span>.</p></div>
+  </div>
+  <p class="lede" style="margin-top:36px">The chain never sees who the patient is, the drug, the quantity, the expiry date, or anything that links two fills by one person. Refused attempts never reach it at all.</p>
+  <div class="num">4</div>
+</section>
+
+<!-- 5. Flow -->
+<section class="slide">
+  <div class="kicker">How it works</div>
+  <h2>A prescription's life, in five steps</h2>
+  <div class="flow">
+    <div class="step"><div class="who">Doctor</div><h3>Issues</h3><p>Proves the key the medical council registered for this licence, and appends one hash of the prescription to a Merkle tree.</p></div>
+    <div class="step"><div class="who">Patient's phone</div><h3>Holds it</h3><p>Receives the prescription as a QR code, like the paper slip. It is bound to the phone's patient key.</p></div>
+    <div class="step"><div class="who">Pharmacy</div><h3>Asks</h3><p>Shows a QR with its licence number and a one-time challenge.</p></div>
+    <div class="step chain"><div class="who">Midnight</div><h3>Fills</h3><p>The phone proves every rule in one transaction. Two nullifiers and a sealed record are written. Nothing else.</p></div>
+    <div class="step"><div class="who">Pharmacist</div><h3>Checks</h3><p>The phone opens the sealed record for the pharmacist alone: exactly this drug, this quantity. Hand it over.</p></div>
+  </div>
+  <p class="lede" style="margin-top:34px">The doctor sees what they prescribe and the pharmacist sees what they hand over. The ledger sees licence numbers, a drug class and hashes.</p>
+  <div class="num">5</div>
+</section>
+
+<!-- 6. Inside the fill -->
+<section class="slide">
+  <div class="kicker">The core circuit</div>
+  <h2>One proof at the counter</h2>
+  <div class="cols c2" style="margin-top:30px; grid-template-columns: 1.05fr 1fr">
+    <div class="card">
+      <h3>The <span class="mono">fill</span> circuit proves, privately</h3>
+      <ul class="clean" style="margin-top:12px">
+        <li>the patient key is enrolled (patient tree)</li>
+        <li>the prescription was issued (prescription tree) to this key</li>
+        <li>its doctor is licensed and active; the pharmacy too</li>
+        <li>it has not expired, and this fill number is unused</li>
+        <li>this person is under the cap for this class in this window</li>
+      </ul>
+    </div>
+    <div class="code">
+      <span class="c">// spent once, per fill of a prescription</span><br/>
+      fill = H(<span class="a">patientSecret</span>, rx, k)<br/>
+      <span class="c">// one per slot, per class, per 30-day window</span><br/>
+      cap&nbsp; = H(<span class="a">patientSecret</span>, class, window, slot)<br/><br/>
+      <span class="c">// published, each through disclose()</span><br/>
+      pharmacy, challenge, window, deadline,<br/>
+      doctor licence, class, fill, cap,<br/>
+      commit(drug, quantity, salt)
+    </div>
+  </div>
+  <p class="lede" style="margin-top:26px">Only the patient's secret can make these nullifiers, so two fills by one person look like fills by two people.</p>
+  <div class="num">6</div>
+</section>
+
+<!-- 7. Who learns what -->
+<section class="slide">
+  <div class="kicker">The privacy boundary</div>
+  <h2>Who learns what</h2>
+  <div class="card" style="margin-top:26px; padding: 8px 18px">
+    <table>
+      <thead><tr><th></th><th>Public ledger</th><th>Patient's phone</th><th>Pharmacy</th></tr></thead>
+      <tbody>
+        <tr><td><b>Who the patient is</b></td><td class="no">Never</td><td>Holds the secret</td><td class="no">Never</td></tr>
+        <tr><td><b>Medicine and quantity</b></td><td>A sealed commitment</td><td>Yes</td><td>At the counter, to hand it over</td></tr>
+        <tr><td><b>Expiry date</b></td><td class="no">Never (a 30-minute deadline only)</td><td>Yes</td><td>No</td></tr>
+        <tr><td><b>Prescribing doctor</b></td><td>Licence number</td><td>Yes</td><td>Licence number</td></tr>
+        <tr><td><b>Drug class</b></td><td>Yes, for volume statistics</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td><b>The patient's other prescriptions</b></td><td class="no">Never</td><td>Yes</td><td class="no">Never</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="src">Every value on the ledger passes through disclose() in the contract. docs/PRIVACY-BOUNDARY.md checks it line by line.</p>
+  <div class="num">7</div>
+</section>
+
+<!-- 8. Why Midnight -->
+<section class="slide dark">
+  <div class="kicker">Why Midnight</div>
+  <h2>Shared rules over private inputs,<br/><em>with nobody in the middle</em></h2>
+  <div class="cols c2" style="margin-top:34px">
+    <div class="card"><h3>Shared, verifiable state</h3><p>The cap has to hold across pharmacies that do not trust each other. Trees, nullifiers and fill records live on Midnight's public ledger.</p></div>
+    <div class="card"><h3>Private witnesses</h3><p>The patient's secret and the prescription stay in private state on the phone. Compact proves the rules over them and publishes only what <span class="mono">disclose()</span> marks.</p></div>
+    <div class="card"><h3>Authorization by proof, not wallet</h3><p>Doctors, authorities and patients prove a secret whose hash is on the ledger. Whoever pays the DUST fee learns nothing and links nothing.</p></div>
+    <div class="card"><h3>Refusals cost nothing</h3><p>A fraudulent fill fails on the caller's device while the circuit runs. No proof, no transaction, no fee, no trace.</p></div>
+  </div>
+  <div class="num">8</div>
+</section>
+
+<!-- 9. Product -->
+<section class="slide">
+  <div class="kicker">The product</div>
+  <h2>Three ways to see it work</h2>
+  <div class="cols c3" style="margin-top:28px">
+    <div class="shot"><img src="../img/demo-counter.png" alt="" /><div class="cap"><b>Guided demo.</b> Nine chapters on the compiled contract, in the browser, no wallet. A panel decodes every transcript and searches it for the private inputs.</div></div>
+    <div class="shot"><img src="../img/live.png" alt="" /><div class="cap"><b>Live with Lace.</b> Deploy your own contract on Preview and run the story with real proofs. Each transaction's raw bytes are searched for secrets.</div></div>
+    <div class="shot"><img src="../img/ledger.png" alt="" /><div class="cap"><b>On-chain audit.</b> Downloads every transaction of the Preview deployment and checks state, history and leaks in your browser.</div></div>
+  </div>
+  <div class="num">9</div>
+</section>
+
+<!-- 10. Engineering -->
+<section class="slide">
+  <div class="kicker">Built and tested</div>
+  <h2>Evidence, not claims</h2>
+  <div class="cols c4" style="margin-top:34px">
+    <div class="stat"><div class="big">6</div><span>circuits in about 300 lines of Compact, compiled with compactc 0.31.1</span></div>
+    <div class="stat"><div class="big">77</div><span>contract and SDK tests, including a model-based test of random histories and decoded-transcript privacy tests</span></div>
+    <div class="stat"><div class="big" data-fill="txs">{{TXS}}</div><span>transactions on Midnight Preview with real proofs, plus {{REFUSALS}} refused attempts that left nothing on chain</span></div>
+    <div class="stat"><div class="big">0</div><span>private values found in the raw bytes of any transaction of the deployed contract</span></div>
+  </div>
+  <div class="cols c3" style="margin-top:30px">
+    <div class="card"><p><b>CI</b> recompiles the contract and requires the committed code to match, then runs every test, the typecheck, the build and Playwright on desktop and phone.</p></div>
+    <div class="card"><p><b>One SDK</b> drives the in-browser simulator, the CLI on Preview and the Lace live page. Each participant holds only their own secret.</p></div>
+    <div class="card"><p><b>A public audit</b> anyone can run, from the CLI or a button on the site, needing no wallet and no key.</p></div>
+  </div>
+  <div class="num">10</div>
+</section>
+
+<!-- 11. Market -->
+<section class="slide">
+  <div class="kicker">Who it is for</div>
+  <h2>Regulators buy it. <em>Pharmacies use it.</em></h2>
+  <div class="cols c3" style="margin-top:30px">
+    <div class="card"><h3>Drug controllers and councils</h3><p>License, cap and suspend with one transaction each. Get live public counts per doctor and pharmacy, and no register to guard.</p></div>
+    <div class="card"><h3>Pharmacies and their software</h3><p>One scan at the counter that covers every other pharmacy. The fill record replaces the paper register entry.</p></div>
+    <div class="card"><h3>Doctors and patients</h3><p>Issuing is one SDK call from e-prescription software. The patient carries a QR code, like the slip.</p></div>
+  </div>
+  <div class="cols c3" style="margin-top:22px">
+    <div class="stat"><div class="big">12 lakh+</div><span>chemists and distributors in India's national trade association (AIOCD)</span></div>
+    <div class="stat"><div class="big">79.71 cr</div><span>ABHA health IDs by July 2025: the registrar that enrolls one key per person</span></div>
+    <div class="stat"><div class="big">2018</div><span>tramadol notified under the NDPS Act; the controlled list keeps growing</span></div>
+  </div>
+  <p class="src">Business model: a fee per controlled fill paid by the pharmacy or programme, a regulator dashboard, and SDK licences for software vendors. Fees are paid in DUST, so patients never handle tokens. Sources in docs/ADOPTION.md.</p>
+  <div class="num">11</div>
+</section>
+
+<!-- 12. Roadmap -->
+<section class="slide">
+  <div class="kicker">Roadmap</div>
+  <h2>From a working contract to a working counter</h2>
+  <div class="road">
+    <div class="card now">
+      <div class="tag">Wave 2, done</div>
+      <ul class="clean" style="margin-top:14px">
+        <li>Compact contract, 6 circuits, 77 tests</li>
+        <li>SDK, CLI and Preview deployment</li>
+        <li>Guided demo, Lace live page, public audit</li>
+        <li>Privacy boundary, threat model, adoption path</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Wave 3</div>
+      <ul class="clean" style="margin-top:14px">
+        <li>Patient wallet as an installable web app</li>
+        <li>Counter page with camera scanning</li>
+        <li>Pharmacy-paid fees, so no wallet links fills</li>
+        <li>Patient key rotation, rounded deadlines</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">After the buildathon</div>
+      <ul class="clean" style="margin-top:14px">
+        <li>Pilot: one hospital and its nearby pharmacies, one or two controlled classes</li>
+        <li>Plug-ins for e-prescription and pharmacy billing software</li>
+        <li>More classes, more states, one contract</li>
+      </ul>
+    </div>
+  </div>
+  <div class="num">12</div>
+</section>
+
+<!-- 13. Close -->
+<section class="slide dark">
+  <div class="kicker">Try it</div>
+  <h2>Policing without the register.</h2>
+  <div class="grow"></div>
+  <div class="links">
+    <div><b>Guided demo</b>sanchay117.github.io/ampoule/#/demo</div>
+    <div><b>Live with Lace</b>sanchay117.github.io/ampoule/#/live</div>
+    <div><b>On-chain audit</b>sanchay117.github.io/ampoule/#/ledger</div>
+    <div><b>Code</b>github.com/Sanchay117/ampoule</div>
+    <div><b>For judges</b>JUDGES.md, a five-minute path</div>
+  </div>
+  <div class="grow"></div>
+  <div class="foot"><span>Apache-2.0. All people and pharmacies in the demo are fictional. Testnet only.</span><span>Built on Midnight</span></div>
+</section>
+
+</body>
+</html>

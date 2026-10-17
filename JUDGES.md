@@ -22,6 +22,10 @@ Open the **[on-chain page](https://sanchay117.github.io/ampoule/#/ledger)** and 
 
 The same checks run from a terminal with `npm run cli -- verify`, which needs no wallet.
 
+## Optional: run it with your own wallet (10 minutes, needs Lace on Preview)
+
+Open the **[live page](https://sanchay117.github.io/ampoule/#/live)** and connect Lace. It deploys your own copy of the contract and runs the core of the story with real proofs: the authorities set up, a doctor prescribes, the patient fills, the pharmacist checks, a second fill is refused (`ALREADY_FILLED`), and a second doctor's prescription is refused at a second pharmacy (`CAP_REACHED`). Lace balances and submits each of the 10 transactions. Under each one, the page shows a search of that transaction's raw bytes for the step's private values. At the end, **Audit your contract** runs the same checks as the on-chain page.
+
 ## 3. Read the code (2 minutes)
 
 - [`contract/src/ampoule.compact`](contract/src/ampoule.compact): about 300 lines. The `fill` circuit at the bottom is the core.
