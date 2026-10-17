@@ -1,0 +1,476 @@
+{
+  "project": "ampoule",
+  "network": "preview",
+  "contractAddress": "0f8217093be51225b999d57cc03bf72fda0fd5d889d013e744fab1e63309daa4",
+  "compactVersion": "0.31.1",
+  "startedAt": "2026-10-17T10:56:47.925Z",
+  "finishedAt": "2026-10-17T11:09:32.847Z",
+  "explorer": {
+    "contract": "https://preview.midnightexplorer.com/contracts/0f8217093be51225b999d57cc03bf72fda0fd5d889d013e744fab1e63309daa4",
+    "deployTx": "https://preview.midnightexplorer.com/transactions/4e2731931c975d9b68fb7f03736de832497f840cf1163d85e56efb7f5b9d4b06"
+  },
+  "deployTx": {
+    "txId": "005964ba11670018bc258b270939e8c3516277335ae6fb2993aced56ae363e098d",
+    "txHash": "4e2731931c975d9b68fb7f03736de832497f840cf1163d85e56efb7f5b9d4b06",
+    "blockHeight": 1335661
+  },
+  "steps": [
+    {
+      "id": "policy-opioids",
+      "label": "Drug controller caps opioid analgesics at 1 fill per 30 days",
+      "actor": "Drug controller",
+      "circuit": "setPolicy",
+      "outcome": "transaction",
+      "txId": "00827f316fa8c6509edf753b9fff8459f06e78fd323aeeb9124e3c2a4097f186b1",
+      "txHash": "69e679dee82d123f7f348a7152aa71a91312e350ce5c9ef8a2c212133827af5c",
+      "blockHeight": 1335755,
+      "explorer": "https://preview.midnightexplorer.com/transactions/69e679dee82d123f7f348a7152aa71a91312e350ce5c9ef8a2c212133827af5c",
+      "durationMs": 20336,
+      "at": "2026-10-17T11:04:44.529Z"
+    },
+    {
+      "id": "license-rao",
+      "label": "Medical council licenses Dr Asha Rao (MC-DL-58213)",
+      "actor": "Medical council",
+      "circuit": "setDoctor",
+      "outcome": "transaction",
+      "txId": "00274590c5a277242a788ef65d9eeecdf8ffbf1b4ddc69baa37496298d2e0f84ac",
+      "txHash": "65d2fdecd22d53de558ebd6983733e245edd4dccfda624c209fdf2bbbe8adba8",
+      "blockHeight": 1335759,
+      "explorer": "https://preview.midnightexplorer.com/transactions/65d2fdecd22d53de558ebd6983733e245edd4dccfda624c209fdf2bbbe8adba8",
+      "durationMs": 24200,
+      "at": "2026-10-17T11:05:08.729Z"
+    },
+    {
+      "id": "license-mehta",
+      "label": "Medical council licenses Dr Vikram Mehta (MC-MH-11902)",
+      "actor": "Medical council",
+      "circuit": "setDoctor",
+      "outcome": "transaction",
+      "txId": "0032bc11078078dbbce4bbada5dae2d735a770cb8ced7bdf9fa742aed5bcf69d64",
+      "txHash": "4a3a760dc2b50544f7aa083e70363e1a1958404582fe0247ed89facb80f2caa7",
+      "blockHeight": 1335762,
+      "explorer": "https://preview.midnightexplorer.com/transactions/4a3a760dc2b50544f7aa083e70363e1a1958404582fe0247ed89facb80f2caa7",
+      "durationMs": 18256,
+      "at": "2026-10-17T11:05:26.986Z"
+    },
+    {
+      "id": "license-lotus",
+      "label": "Drug controller licenses Lotus Pharmacy, Delhi (DL-RX-20B-4471)",
+      "actor": "Drug controller",
+      "circuit": "setPharmacy",
+      "outcome": "transaction",
+      "txId": "0088398e650af1c6311246b77dfe44fdc4129716fae6325e157cd8396e7591232c",
+      "txHash": "0cf8ed58bd9b146f415d2c36bdfa28ccaeb60395c704cd87aa5bef6368ea43ce",
+      "blockHeight": 1335765,
+      "explorer": "https://preview.midnightexplorer.com/transactions/0cf8ed58bd9b146f415d2c36bdfa28ccaeb60395c704cd87aa5bef6368ea43ce",
+      "durationMs": 17485,
+      "at": "2026-10-17T11:05:44.471Z"
+    },
+    {
+      "id": "license-neem",
+      "label": "Drug controller licenses Neem Chemists, Mumbai (MH-RX-21B-0932)",
+      "actor": "Drug controller",
+      "circuit": "setPharmacy",
+      "outcome": "transaction",
+      "txId": "00af4ece1be0eadebd2f45c40de46e259c51c4a2f71b3f349d5e1bd54133f5dbc1",
+      "txHash": "9f2e3621e7f5c9875162279f9f454bdbd6e0e28414f9bf87882a37693014893d",
+      "blockHeight": 1335768,
+      "explorer": "https://preview.midnightexplorer.com/transactions/9f2e3621e7f5c9875162279f9f454bdbd6e0e28414f9bf87882a37693014893d",
+      "durationMs": 18061,
+      "at": "2026-10-17T11:06:02.532Z"
+    },
+    {
+      "id": "enroll-ravi",
+      "label": "Registrar enrolls Ravi's patient key",
+      "actor": "Health ID registrar",
+      "circuit": "enrollPatient",
+      "outcome": "transaction",
+      "txId": "008ed573e147a04a3010cccb867d80bb5e925ec64533848636a49fea762c464312",
+      "txHash": "8f309e56963fbb2a44709b1dc84faccf1e3f23bd4ea0e03e93a4d42c8da7b7aa",
+      "blockHeight": 1335772,
+      "explorer": "https://preview.midnightexplorer.com/transactions/8f309e56963fbb2a44709b1dc84faccf1e3f23bd4ea0e03e93a4d42c8da7b7aa",
+      "durationMs": 25769,
+      "at": "2026-10-17T11:06:28.301Z"
+    },
+    {
+      "id": "enroll-meera",
+      "label": "Registrar enrolls Meera's patient key",
+      "actor": "Health ID registrar",
+      "circuit": "enrollPatient",
+      "outcome": "transaction",
+      "txId": "00a012a17a0539e3d97cb6a21acd6e74b4bf54b3890cd240a10b0b202c3d831364",
+      "txHash": "235d1820fafdf4568e0068175097a86b0c48a86bb5eb0dfed246c7aee5a9613d",
+      "blockHeight": 1335776,
+      "explorer": "https://preview.midnightexplorer.com/transactions/235d1820fafdf4568e0068175097a86b0c48a86bb5eb0dfed246c7aee5a9613d",
+      "durationMs": 23116,
+      "at": "2026-10-17T11:06:51.418Z"
+    },
+    {
+      "id": "rx-amox",
+      "label": "Dr Asha Rao prescribes amoxicillin to Ravi",
+      "actor": "Dr Asha Rao",
+      "circuit": "issue",
+      "outcome": "transaction",
+      "txId": "008e942f15481deaf51322c496d0767fa369472a9cffd8cec4cdcbfa2db42a74aa",
+      "txHash": "ed4103cdd4ca5b432d8de542b1332b82442c1a8e20f138b9257496322e5642a4",
+      "blockHeight": 1335780,
+      "explorer": "https://preview.midnightexplorer.com/transactions/ed4103cdd4ca5b432d8de542b1332b82442c1a8e20f138b9257496322e5642a4",
+      "durationMs": 22925,
+      "at": "2026-10-17T11:07:14.343Z"
+    },
+    {
+      "id": "fill-amox",
+      "label": "Ravi fills it at Lotus Pharmacy, Delhi",
+      "actor": "Ravi",
+      "circuit": "fill",
+      "outcome": "transaction",
+      "txId": "0016a952cb7d27f5b04cf840a9d1a155c5e0559f2e66ae107c82bdafbeb5865cde",
+      "txHash": "1d0a69ee54ff88f126d08e6a29b8739f871fbef7b5b3589b4594be35659c0a82",
+      "blockHeight": 1335784,
+      "explorer": "https://preview.midnightexplorer.com/transactions/1d0a69ee54ff88f126d08e6a29b8739f871fbef7b5b3589b4594be35659c0a82",
+      "durationMs": 24154,
+      "at": "2026-10-17T11:07:38.497Z"
+    },
+    {
+      "id": "check-amox",
+      "label": "Lotus Pharmacy, Delhi checks the patient's opening against the fill record on chain",
+      "actor": "Lotus Pharmacy, Delhi",
+      "circuit": "(read only)",
+      "outcome": "checked",
+      "detail": {
+        "drug": "amoxicillin-500-cap",
+        "quantity": "21",
+        "matchesCommitment": true
+      },
+      "durationMs": 0,
+      "at": "2026-10-17T11:07:38.700Z"
+    },
+    {
+      "id": "refill-amox",
+      "label": "Ravi tries to fill the same prescription again at Neem Chemists, Mumbai",
+      "actor": "Ravi",
+      "circuit": "fill",
+      "outcome": "refused",
+      "refusal": {
+        "code": "ALREADY_FILLED",
+        "explanation": "This prescription has already been filled as many times as prescribed."
+      },
+      "durationMs": 609,
+      "at": "2026-10-17T11:07:39.309Z"
+    },
+    {
+      "id": "rx-tramadol-rao",
+      "label": "Dr Asha Rao prescribes tramadol to Ravi",
+      "actor": "Dr Asha Rao",
+      "circuit": "issue",
+      "outcome": "transaction",
+      "txId": "00002291c9faa6b9c2cc64ed2f2dfdc722e1baa500312518b8bbf3169961b255e0",
+      "txHash": "7bbb5072111964c02657c646d2e4b1b5be047e83cb3ec73bec83d6f05de0a9a7",
+      "blockHeight": 1335788,
+      "explorer": "https://preview.midnightexplorer.com/transactions/7bbb5072111964c02657c646d2e4b1b5be047e83cb3ec73bec83d6f05de0a9a7",
+      "durationMs": 23499,
+      "at": "2026-10-17T11:08:02.809Z"
+    },
+    {
+      "id": "fill-tramadol",
+      "label": "Ravi fills the tramadol at Lotus Pharmacy, Delhi",
+      "actor": "Ravi",
+      "circuit": "fill",
+      "outcome": "transaction",
+      "txId": "0093679e2fb4f763e3fc3bd5d9b39fc2ba30e9b6330383048e45e845122abd56cb",
+      "txHash": "c2eacb76fba237e3f4ce2ea15f9f4b8164aa20f1bcefe00e09cf221e3e5e7265",
+      "blockHeight": 1335792,
+      "explorer": "https://preview.midnightexplorer.com/transactions/c2eacb76fba237e3f4ce2ea15f9f4b8164aa20f1bcefe00e09cf221e3e5e7265",
+      "durationMs": 24265,
+      "at": "2026-10-17T11:08:27.074Z"
+    },
+    {
+      "id": "rx-tramadol-mehta",
+      "label": "Ravi gets a second tramadol prescription from Dr Vikram Mehta",
+      "actor": "Dr Vikram Mehta",
+      "circuit": "issue",
+      "outcome": "transaction",
+      "txId": "0074b5b3ff31ec0c065aeb62f0915af6e72d2e6021f16efca8038a04b76e55729d",
+      "txHash": "44dab6114c350be8554d3823ac52bfeaec185c3289914f89d25142b07f888f76",
+      "blockHeight": 1335796,
+      "explorer": "https://preview.midnightexplorer.com/transactions/44dab6114c350be8554d3823ac52bfeaec185c3289914f89d25142b07f888f76",
+      "durationMs": 22800,
+      "at": "2026-10-17T11:08:49.874Z"
+    },
+    {
+      "id": "shop-tramadol",
+      "label": "Ravi tries to fill it at Neem Chemists, Mumbai, a different pharmacy in another city",
+      "actor": "Ravi",
+      "circuit": "fill",
+      "outcome": "refused",
+      "refusal": {
+        "code": "CAP_REACHED",
+        "explanation": "The cap for this controlled class is reached for this window, across all pharmacies."
+      },
+      "durationMs": 633,
+      "at": "2026-10-17T11:08:50.508Z"
+    },
+    {
+      "id": "stolen-token",
+      "label": "Meera tries to fill Ravi's tramadol prescription",
+      "actor": "Meera",
+      "circuit": "fill",
+      "outcome": "refused",
+      "refusal": {
+        "code": "NOT_YOUR_PRESCRIPTION",
+        "explanation": "This prescription was written for someone else."
+      },
+      "durationMs": 1412,
+      "at": "2026-10-17T11:08:51.920Z"
+    },
+    {
+      "id": "forged",
+      "label": "Ravi edits the quantity on a prescription from 10 to 60 tablets",
+      "actor": "Ravi",
+      "circuit": "fill",
+      "outcome": "refused",
+      "refusal": {
+        "code": "NO_SUCH_PRESCRIPTION",
+        "explanation": "No doctor issued this prescription. It is forged or was altered."
+      },
+      "durationMs": 672,
+      "at": "2026-10-17T11:08:52.592Z"
+    },
+    {
+      "id": "rx-metformin",
+      "label": "Dr Vikram Mehta prescribes metformin to Meera",
+      "actor": "Dr Vikram Mehta",
+      "circuit": "issue",
+      "outcome": "transaction",
+      "txId": "0000dc3ea120abfbb85158ad460cd829c42263893a137ac6e8a49a06017e6cb883",
+      "txHash": "81be8d49a5920f8a79fc2679d8a5645b8c731a381c68793d1f3c029e51164b62",
+      "blockHeight": 1335800,
+      "explorer": "https://preview.midnightexplorer.com/transactions/81be8d49a5920f8a79fc2679d8a5645b8c731a381c68793d1f3c029e51164b62",
+      "durationMs": 21812,
+      "at": "2026-10-17T11:09:14.404Z"
+    },
+    {
+      "id": "suspend-mehta",
+      "label": "Medical council suspends Dr Vikram Mehta",
+      "actor": "Medical council",
+      "circuit": "setDoctor",
+      "outcome": "transaction",
+      "txId": "00bb909c116c37e527cdd5fad454969fe8e3c8b3bd6afe84f64afda7467ca7a62d",
+      "txHash": "069e948c7f5fa4e78e9cd53dba4937c012aae1b69df3237c56e734d3d96f0774",
+      "blockHeight": 1335803,
+      "explorer": "https://preview.midnightexplorer.com/transactions/069e948c7f5fa4e78e9cd53dba4937c012aae1b69df3237c56e734d3d96f0774",
+      "durationMs": 17579,
+      "at": "2026-10-17T11:09:31.983Z"
+    },
+    {
+      "id": "suspended",
+      "label": "Meera tries to fill Dr Vikram Mehta's prescription",
+      "actor": "Meera",
+      "circuit": "fill",
+      "outcome": "refused",
+      "refusal": {
+        "code": "DOCTOR_SUSPENDED",
+        "explanation": "The prescribing doctor's licence is suspended."
+      },
+      "durationMs": 645,
+      "at": "2026-10-17T11:09:32.628Z"
+    }
+  ],
+  "summary": {
+    "transactions": 14,
+    "refusals": [
+      {
+        "id": "refill-amox",
+        "code": "ALREADY_FILLED"
+      },
+      {
+        "id": "shop-tramadol",
+        "code": "CAP_REACHED"
+      },
+      {
+        "id": "stolen-token",
+        "code": "NOT_YOUR_PRESCRIPTION"
+      },
+      {
+        "id": "forged",
+        "code": "NO_SUCH_PRESCRIPTION"
+      },
+      {
+        "id": "suspended",
+        "code": "DOCTOR_SUSPENDED"
+      }
+    ],
+    "firstBlock": 1335755,
+    "lastBlock": 1335803
+  },
+  "finalState": {
+    "authorities": {
+      "council": "dfe487f3e18c610ecc7b720c31f2ebd5903014f2837a966fcab5bbe823d9966c",
+      "controller": "3e963af82cd6ffd0765f22104ec0d4e2d0219a1087b44d8fc19bbc420308c174",
+      "registrar": "d99fcdbec8e8d6b8d6ea05adad9b43ad13f08ed171296d4d5aa41efa2c809726"
+    },
+    "doctors": [
+      {
+        "id": "4d432d444c2d3538323133000000000000000000000000000000000000000000",
+        "licence": "MC-DL-58213",
+        "keyHash": "b8e0beaa2e0db16114584a59599a5567a408ea8e542f125a6022f632f9f8e249",
+        "active": true,
+        "issued": "2",
+        "controlledIssued": "1",
+        "filled": "2",
+        "controlledFilled": "1"
+      },
+      {
+        "id": "4d432d4d482d3131393032000000000000000000000000000000000000000000",
+        "licence": "MC-MH-11902",
+        "keyHash": "84cd4778fbadb00908c2803fb8f5f65e8a11e34a8716a542867669925419e51e",
+        "active": false,
+        "issued": "2",
+        "controlledIssued": "1",
+        "filled": "0",
+        "controlledFilled": "0"
+      }
+    ],
+    "pharmacies": [
+      {
+        "id": "444c2d52582d3230422d34343731000000000000000000000000000000000000",
+        "licence": "DL-RX-20B-4471",
+        "keyHash": "d5e8dae30b195099250d59866be3342f79b9e6cd537049d7d4ea2227dc4692db",
+        "active": true,
+        "filled": "2"
+      },
+      {
+        "id": "4d482d52582d3231422d30393332000000000000000000000000000000000000",
+        "licence": "MH-RX-21B-0932",
+        "keyHash": "8c24c2dd96f8e8eb57d268f2087cd31af3ef2bc5f7e06cd01a0ed4ca9fdacb2d",
+        "active": true,
+        "filled": "0"
+      }
+    ],
+    "policies": [
+      {
+        "drugClass": "1",
+        "windowSeconds": "2592000",
+        "maxFills": "1"
+      }
+    ],
+    "fills": [
+      {
+        "challenge": "6d0a5c3155142b5ca1f7e86830eedd30abd538dea230b22d4440a6068f2abd4c",
+        "pharmacy": "444c2d52582d3230422d34343731000000000000000000000000000000000000",
+        "pharmacyLicence": "DL-RX-20B-4471",
+        "doctor": "4d432d444c2d3538323133000000000000000000000000000000000000000000",
+        "doctorLicence": "MC-DL-58213",
+        "drugClass": "0",
+        "dispense": "77a5e75492e641c43dfa39054dc42eb385ddbf48e38ac06a3224f213a4cd0fdf",
+        "validBefore": "1792237020"
+      },
+      {
+        "challenge": "deff233670d9c450c0c3e4712ac2bb3137a7bcb4c099139c66f3bccc304ae78e",
+        "pharmacy": "444c2d52582d3230422d34343731000000000000000000000000000000000000",
+        "pharmacyLicence": "DL-RX-20B-4471",
+        "doctor": "4d432d444c2d3538323133000000000000000000000000000000000000000000",
+        "doctorLicence": "MC-DL-58213",
+        "drugClass": "1",
+        "dispense": "234084ced90072509a2f840ff3ee05bbf2026ade2b61416d934c70223910a0db",
+        "validBefore": "1792237068"
+      }
+    ],
+    "totals": {
+      "issued": "4",
+      "filled": "2",
+      "enrolled": "2",
+      "prescriptions": "4",
+      "fillNullifiers": "2",
+      "capNullifiers": "1"
+    },
+    "roots": {
+      "patients": "18424739093320665741259134048815401873608759026764097130504068308788718728147",
+      "prescriptions": "18929900574303667020994225427410469053756936662253823042183041184758566806748"
+    },
+    "fillsByClass": [
+      {
+        "drugClass": "1",
+        "fills": "1"
+      }
+    ]
+  },
+  "disclosedForAudit": {
+    "note": "Testnet demo data, published only so anyone can check that the chain holds none of it. In real use these values never leave the doctor's and the patient's devices.",
+    "patients": [
+      {
+        "name": "Ravi",
+        "patientKey": "62158c4b582d96782ae9dce778438550f02c9f2ac197e19eec6392af12e66311"
+      },
+      {
+        "name": "Meera",
+        "patientKey": "022fc0783bf1c5d15d12ca9785fd02cfcc763ad5097e08e52283f7452fab4d38"
+      }
+    ],
+    "prescriptions": [
+      {
+        "step": "rx-amox",
+        "drugCode": "amoxicillin-500-cap",
+        "patient": "62158c4b582d96782ae9dce778438550f02c9f2ac197e19eec6392af12e66311",
+        "doctor": "MC-DL-58213",
+        "quantity": "21",
+        "drugClass": "0",
+        "fills": "1",
+        "notAfter": "1794827046",
+        "salt": "4974b93e6029b2561755b651d18a01e8fc7711c2e24c9f9382d8e0082052233b",
+        "leaf": "e56985ca421d37358fb223366e9721519c54ed881fc2da66b26dfe6a004d226d"
+      },
+      {
+        "step": "rx-tramadol-rao",
+        "drugCode": "tramadol-50-tab",
+        "patient": "62158c4b582d96782ae9dce778438550f02c9f2ac197e19eec6392af12e66311",
+        "doctor": "MC-DL-58213",
+        "quantity": "10",
+        "drugClass": "1",
+        "fills": "1",
+        "notAfter": "1797419046",
+        "salt": "eacb4a791b0a8babd493dcbcb9544d308d504c2073496585cdb4b4d3df4c40a9",
+        "leaf": "5b15d7f456e362722aee99c760070256a5b34173fc8a7bd99867e3119a7cd267"
+      },
+      {
+        "step": "rx-tramadol-mehta",
+        "drugCode": "tramadol-50-tab",
+        "patient": "62158c4b582d96782ae9dce778438550f02c9f2ac197e19eec6392af12e66311",
+        "doctor": "MC-MH-11902",
+        "quantity": "10",
+        "drugClass": "1",
+        "fills": "1",
+        "notAfter": "1797419046",
+        "salt": "36a778ebed425944cd174755765cfc3adf1a065a2f5c6ac96c9b6dd1fdd701e7",
+        "leaf": "59d9a7c1842eaec3f9610e8399a3165c27a0d3a8b69f00d8c70633c05bffad00"
+      },
+      {
+        "step": "rx-metformin",
+        "drugCode": "metformin-500-tab",
+        "patient": "022fc0783bf1c5d15d12ca9785fd02cfcc763ad5097e08e52283f7452fab4d38",
+        "doctor": "MC-MH-11902",
+        "quantity": "60",
+        "drugClass": "0",
+        "fills": "1",
+        "notAfter": "1794827046",
+        "salt": "f6e8b89c6c7480c3b6bb5e3f5a1f6d2b4673fdcd1056e5b8f973e4c6f60ae68f",
+        "leaf": "82ecdab6370fdffef8702b9ecb009c710f1ef9f2f5dab53cee3fdeb52c5806d4"
+      }
+    ],
+    "dispenseSalts": [
+      {
+        "step": "fill-amox",
+        "salt": "7b4ac55f2e297ada08127be4ec443f51021567dae40010ae5f6672d6bb1482d9"
+      },
+      {
+        "step": "fill-tramadol",
+        "salt": "63c849dcdfe6d4493651f12bf963fd5557f4aa8ed75e7ec77f5eb62c7444d941"
+      }
+    ],
+    "publicControls": [
+      "MC-DL-58213",
+      "DL-RX-20B-4471"
+    ]
+  }
+}

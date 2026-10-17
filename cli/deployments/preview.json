@@ -1,0 +1,21 @@
+{
+  "project": "ampoule",
+  "network": "preview",
+  "contractAddress": "0f8217093be51225b999d57cc03bf72fda0fd5d889d013e744fab1e63309daa4",
+  "deployTx": {
+    "txId": "005964ba11670018bc258b270939e8c3516277335ae6fb2993aced56ae363e098d",
+    "txHash": "4e2731931c975d9b68fb7f03736de832497f840cf1163d85e56efb7f5b9d4b06",
+    "blockHeight": 1335661
+  },
+  "deployedAt": "2026-10-17T10:55:20.926Z",
+  "compactVersion": "0.31.1",
+  "sealed": {
+    "council": "dfe487f3e18c610ecc7b720c31f2ebd5903014f2837a966fcab5bbe823d9966c",
+    "controller": "3e963af82cd6ffd0765f22104ec0d4e2d0219a1087b44d8fc19bbc420308c174",
+    "registrar": "d99fcdbec8e8d6b8d6ea05adad9b43ad13f08ed171296d4d5aa41efa2c809726"
+  },
+  "explorer": {
+    "contract": "https://preview.midnightexplorer.com/contracts/0f8217093be51225b999d57cc03bf72fda0fd5d889d013e744fab1e63309daa4",
+    "deployTx": "https://preview.midnightexplorer.com/transactions/4e2731931c975d9b68fb7f03736de832497f840cf1163d85e56efb7f5b9d4b06"
+  }
+}
