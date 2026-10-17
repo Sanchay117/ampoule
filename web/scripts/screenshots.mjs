@@ -39,6 +39,9 @@ async function shoot(id, file) {
   const next = CHAPTERS[CHAPTERS.indexOf(id) + 1];
   if (next) {
     await page.goto(`${base}#/demo/${next}`);
+    // The skip button renders with the chapter, so wait for the chapter before asking for it.
+    await page.locator('.stage-head h2').waitFor();
+    await page.waitForTimeout(300);
     const skip = page.getByTestId('skip');
     if (await skip.count()) {
       await skip.click();

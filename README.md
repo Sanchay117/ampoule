@@ -45,6 +45,10 @@ Regulators set controlled-drug rules and pharmacies carry them out. Ampoule give
 
 **On Midnight Preview.** The CLI runs the same story on the public testnet with real zero-knowledge proofs. The [on-chain page](https://sanchay117.github.io/ampoule/#/ledger) lists every transaction with explorer links, and its "Run the checks" button downloads every raw transaction of the contract from the public indexer and runs the same audit as `npm run cli -- verify`, in your browser.
 
+| The live page, after a run on Preview | The public audit of the reference deployment |
+|---|---|
+| ![](docs/img/live.png) | ![](docs/img/ledger.png) |
+
 ## How it works
 
 ```mermaid
@@ -134,7 +138,8 @@ Secrets (the wallet mnemonic, the demo's authority keys) are written to `cli/.se
 | [`sdk/`](sdk) | One client per participant (council, controller, registrar, doctor, pharmacy, patient), the QR token codecs, the transcript decoder, the public view, the audit, and two backends: in-memory and Midnight network |
 | [`cli/`](cli) | Headless wallet, deploy, the resumable on-chain scenario, `verify`, and the wallet bridge |
 | [`web/`](web) | The site: landing page, guided demo, live page with Lace, on-chain page, Playwright tests |
-| [`docs/`](docs) | Privacy boundary, threat model, adoption path |
+| [`docs/`](docs) | Privacy boundary, threat model, adoption path, and the pitch deck ([`docs/deck`](docs/deck), rendered to [`Ampoule-deck.pdf`](docs/Ampoule-deck.pdf)) |
+| [`video/`](video) | The demo video as scripts: narration, a Playwright recording of the real site (the live scenes run on Preview), and the ffmpeg edit |
 
 Built with compactc 0.31.1, `@midnight-ntwrk/compact-runtime` 0.16.0, ledger v8, midnight-js 4.1.1, wallet-sdk 1.2.0 and proof server 8.1.3, as listed in Midnight's compatibility matrix for Preview.
 
