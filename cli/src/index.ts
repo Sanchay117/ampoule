@@ -25,6 +25,10 @@ const USAGE = `ampoule cli (network defaults to preview)
       state, call history, issuance, and a search of every raw transaction for private values.
       Needs no wallet. Exits non-zero on any failure.
 
+  bridge          [--network <id>] [--port 6301]
+      Lends the funded wallet to the site's live page on localhost, in place of Lace. The page
+      proves with the local proof server; the bridge balances, signs and submits.
+
 Networks: undeployed (local devnet), preview, preprod.`;
 
 async function run(args: Args): Promise<number> {
@@ -37,6 +41,8 @@ async function run(args: Args): Promise<number> {
       return (await import('./scenario.js')).scenario(args);
     case 'verify':
       return (await import('./verify.js')).verify(args);
+    case 'bridge':
+      return (await import('./bridge.js')).bridge(args);
     case '':
     case 'help':
     case '--help':

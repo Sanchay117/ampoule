@@ -17,6 +17,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      COMPACTC_VERSION: 0.31.1
     steps:
       - uses: actions/checkout@v4
 
@@ -25,7 +27,22 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Install the Compact compiler
+        run: |
+          dir="$HOME/.local/compactc-${COMPACTC_VERSION}"
+          curl -fsSL -o /tmp/compactc.zip \
+            "https://github.com/midnightntwrk/compact/releases/download/compactc-v${COMPACTC_VERSION}/compactc_v${COMPACTC_VERSION}_x86_64-unknown-linux-musl.zip"
+          mkdir -p "$dir"
+          unzip -q /tmp/compactc.zip -d "$dir"
+
       - run: npm ci
+
+      # The live page deploys and proves from the browser, so the site serves the proving keys.
+      # Key generation is deterministic: these match the keys the CLI deployed with.
+      - name: Compile the contract with its proving keys
+        run: |
+          npm run compile
+          npm run -w web zk:stage
 
       - name: Build the site
         run: npm run build

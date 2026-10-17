@@ -67,6 +67,9 @@ export default function Landing() {
               <Link className="btn accent" to="/demo" data-testid="cta-demo">
                 Run the demo in your browser
               </Link>
+              <Link className="btn ghost" to="/live">
+                Run it live with Lace
+              </Link>
               <Link className="btn ghost" to="/ledger">
                 Check it on Midnight Preview
               </Link>
@@ -254,6 +257,9 @@ export default function Landing() {
           <div className="ctas" style={{ display: 'flex', gap: 12, marginTop: 32, flexWrap: 'wrap' }}>
             <Link className="btn accent" to="/demo">
               Run the demo
+            </Link>
+            <Link className="btn ghost" to="/live">
+              Run it live with Lace
             </Link>
             <Link className="btn ghost" to="/ledger">
               See the Preview deployment

@@ -11,6 +11,7 @@
   "dependencies": {
     "@ampoule/contract": "0.2.0",
     "@ampoule/sdk": "0.2.0",
+    "@midnight-ntwrk/midnight-js-protocol": "4.1.1",
     "@scure/bip39": "^1.6.0"
   },
   "devDependencies": {

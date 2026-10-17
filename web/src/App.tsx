@@ -8,6 +8,8 @@ import Landing from './routes/Landing';
 // The demo and the ledger load the contract runtime (WebAssembly); the landing page does not.
 const Demo = lazy(() => import('./routes/Demo'));
 const LedgerPage = lazy(() => import('./routes/Ledger'));
+// Live mode also loads the wallet, proof and contract-deployment stack.
+const LivePage = lazy(() => import('./routes/Live'));
 
 function Loading() {
   return (
@@ -31,6 +33,7 @@ export default function App() {
           <nav className="nav-links">
             <NavLink to="/demo">Demo</NavLink>
             <NavLink to="/ledger">On chain</NavLink>
+            <NavLink to="/live">Live</NavLink>
             {REPO_URL && (
               <a href={REPO_URL} target="_blank" rel="noreferrer">
                 Code
@@ -48,6 +51,7 @@ export default function App() {
           <Route path="/demo" element={<Demo />} />
           <Route path="/demo/:chapter" element={<Demo />} />
           <Route path="/ledger" element={<LedgerPage />} />
+          <Route path="/live" element={<LivePage />} />
           <Route path="*" element={<Landing />} />
         </Routes>
       </Suspense>

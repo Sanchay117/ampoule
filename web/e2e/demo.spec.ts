@@ -130,6 +130,32 @@ test('the whole story plays on a phone without horizontal scrolling', async ({ p
   }
 });
 
+test('the live page says what it needs, and refuses a wallet on the wrong network', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('./#/live');
+  await expect(tid(page, 'no-wallet')).toBeVisible();
+
+  // A DApp Connector 4 wallet that is on Preprod, injected the way an extension would be.
+  await page.addInitScript(() => {
+    (window as unknown as { midnight: unknown }).midnight = {
+      testWallet: {
+        name: 'Test wallet',
+        apiVersion: '4.0.1',
+        icon: '',
+        rdns: 'test.wallet',
+        connect: async () => ({
+          getConfiguration: async () => ({ networkId: 'preprod', indexerUri: '', indexerWsUri: '', substrateNodeUri: '' }),
+        }),
+      },
+    };
+  });
+  await page.reload();
+  await tid(page, 'connect-extension').click();
+  await expect(tid(page, 'live-error')).toContainText('Switch it to Midnight Preview');
+  expect(errors).toEqual([]);
+});
+
 test('the landing page and the on-chain page render', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('One prescription, one fill');
